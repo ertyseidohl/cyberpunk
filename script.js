@@ -28,9 +28,9 @@ var createScript = function(){return {
 			{
 				text: "Lead Developer: Erty Seidel",
 				color: "red",
-				appear: "type",
+				appear: "letter",
 				contain: "p",
-				font-family: "cursive"
+				font: "cursive"
 			},
 			"Sound and Music: Evan Conway",
 			"Developer-in-training: Matt Golon"
@@ -428,7 +428,7 @@ var createScript = function(){return {
 		],
 		options: [
 			{
-				text: "Walk towards the light"
+				text: "Walk towards the light",
 				state: "mizumo_sb2_hallway"
 			}
 		]
@@ -438,7 +438,7 @@ var createScript = function(){return {
 		text: [
 			"There is a vintage electrical box to your right, emmiting a slow and soothing hum.",
 			"It is caked in a layer of dust, except for 4 straight lines just large enough to have made out a hand shutting the box."
-		]
+		],
 		options: [
 			{
 				text: "Open the box",
@@ -485,9 +485,9 @@ var createScript = function(){return {
 					game.player.inventory.push(game.items.flashlight);
 					game.updatePlayer();
 					game.setScriptState("mizumo_sb2_hallway");
+				}
 			}
 		]
-
 
 	},
 	mizumo_sb2_rms: {
@@ -495,9 +495,9 @@ var createScript = function(){return {
 
 	},
 	mizumo_sb2_rm229_off: {
-		location: 'Mizumo HQ, Sub-Basement 2, Room S229'
+		location: 'Mizumo HQ, Sub-Basement 2, Room S229',
 		text: [
-			"You are able to open a door at the end of the hall to a dark room.", 
+			"You are able to open a door at the end of the hall to a dark room.",
 			"The faint glow of the hallway light is not enough for you to find even a light switch"
 		],
 		options: [

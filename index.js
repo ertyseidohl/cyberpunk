@@ -179,15 +179,15 @@
 	var TypeWriter = function(){
 		this.queue = [];
 
-		this.push = function(element, strings, delay, callback){
+		this.push = function(element, stringObjects, delay, callback){
 			var that = this;
 			//strings = strings.map(function(s){return s.split(/(\s)/).filter(Boolean)});
 			this.queue.push({
 				"element": element,
-				"strings": strings,
+				"stringObjects": stringObjects,
 				"delay": delay,
 				delayPassed: 0,
-				stringsIndex: 0,
+				objectsIndex: 0,
 				stringIndex: 0,
 				loop: that.typeFunction,
 				done: false,
@@ -206,7 +206,8 @@
 			});
 		}
 
-		this.typeFunction = function(){
+		/*
+			(){
 			if(this.done) return;
 			this.delayPassed += 1;
 			if(this.delayPassed == this.delay){
@@ -229,6 +230,28 @@
 					}
 				}
 			}
+		*/
+
+		this.typeFunction = function(){
+			if(this.done) return;
+			this.delayPassed += 1;
+			if(this.delayPassed == this.delay){
+				this.delayPassed = 0;
+				if(this.stringIndex == 0){
+					this.el = document.createElement(this.stringObjects[this.objectsIndex].contain);
+					this.el.style.color = this.stringObjects[this.objectsIndex].color;
+					this.el.style.fontFamily = this.stringObjects[this.objectsIndex].font;
+					this.element.appendChild(this.el);
+				}
+				if(this.stringIndex == this.stringObjects[this.objectsIndex].text.length){
+					this.objectsIndex ++;
+					this.stringIndex = 0;
+					if(this.objectsIndex == this.stringObjects.length) this.done = true;
+				} else{
+					this.el.innerHTML += this.stringObjects[this.objectsIndex].text[this.stringIndex];
+					this.stringIndex ++;
+				}
+			}
 		};
 
 		this.loop = function(){
@@ -247,18 +270,30 @@
 
 	var __ = function(strArr){
 		return strArr.map(function(str){
-			if(typeof(str) == "function"){
-				return str.call(this);
+			var obj = {
+				text: '',
+				color: 'green',
+				appear: 'type',
+				contain: 'p',
+				font: 'courier new'
 			}
-			return str;
-		}).filter(function(str){
-			return !!str;
-		}).map(function(str){
+			if(typeof(str) == "function"){
+				str = str.call(this);
+			}
 			if(typeof(str) == "object"){
-				return str;
-			};
-			return str.replace('__NAME__', game.player.name).replace('__NAME_UC__', game.player.name.toUpperCase());
-		});
+				obj.text = str.text || obj.text;
+				obj.color = str.color || obj.color;
+				obj.appear = str.appear || obj.appear;
+				obj.contain = str.contain || obj.contain;
+				obj.font = str.font || obj.font;
+			} else if(typeof(str) == "string"){
+				obj.text = str;
+			}
+			obj.text = obj.text.replace('__NAME__', game.player.name).replace('__NAME_UC__', game.player.name.toUpperCase());
+			return obj;
+		}).filter(function(obj){
+			return obj.text.length > 0;
+		})
 	}
 
 	var Game = function(inId, outId, playerId, opt1Id, opt2Id, opt3Id, opt4Id){
@@ -301,6 +336,10 @@
 				location: '',
 				events: {}
 			};
+
+			this.player.has = function(item){
+				return player.inventory.indexOf(item) != -1;
+			}
 
 			this.items = {
 				sb2_keycard: "Mizumo Keycard"
