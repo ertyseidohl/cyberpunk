@@ -124,9 +124,45 @@
 
 			game.lastScriptState = game.scriptState;
 
-		}
+		},
+		game_over: function(game, frame) {
+			var anim = document.getElementById("anim");
+			if(frame == 0){
+				this.done = 0;
+				this.size = {
+					x: anim.style.width,
+					y: anim.style.height,
+					xmax: document.body.clientWidth,
+					ymax: document.body.clientHeight
+				}
+			}
 
+			this.size.x += Math.random() * 100;
+			this.size.y += Math.random() * 100;
+
+			if(this.size.x > this.size.xmax){
+				this.size.x = this.size.xmax;
+				this.done = 1;
+			}
+			if(this.size.y > this.size.ymax){
+				this.size.y = this.size.ymax;
+				if(this.done == 1) this.done = 2;
+			}
+
+			anim.style.width = this.size.x + "px";
+			anim.style.height = this.size.y + "px";
+
+			anim.style.marginTop = (-.5 * this.size.y) + "px";
+			anim.style.marginLeft = (-.5 * this.size.x) + "px";
+
+			if(this.done == 2){
+				anim.parentNode.removeChild(anim);
+				document.getElementById("anim2").parentNode.removeChild(document.getElementById("anim2"));
+				game.setState("playing");
+			}
+		}
 	}
+
 
 	var TypeWriter = function(){
 		this.queue = [];
