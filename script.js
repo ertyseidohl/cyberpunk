@@ -428,7 +428,7 @@ var createScript = function(){return {
 		],
 		options: [
 			{
-				text: "Walk towards the light"
+				text: "Walk towards the light",
 				state: "mizumo_sb2_hallway"
 			}
 		]
