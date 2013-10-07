@@ -10,7 +10,26 @@ var createScript = function(){return {
 				callback: function(){
 					game.setState("login");
 				}
+			},
+			{
+				text: "Credits",
+				state: "credits"
 			}
+		]
+	},
+	credits: {
+		location: "Boulder, Colorado",
+		callfore: function(){
+			game.player.name = "Handprint Industries";
+			game.player.inventory = ["Awesome Sauce"];
+		},
+		text: [
+			"A Handprint Industries Game",
+			{
+				text: "<span style='color:#ff0000'>Lead Developer: Erty Seidel</span>",
+			},
+			"Sound and Music: Evan Conway",
+			"Developer-in-training: Matt Golon"
 		]
 	},
 	mizumo_start: {

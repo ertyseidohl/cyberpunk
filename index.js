@@ -218,9 +218,15 @@
 				if(this.stringsIndex == this.strings.length){
 					this.done = true;
 				} else{
-					this.element.innerHTML += this.strings[this.stringsIndex][this.stringIndex];
-					this.delayPassed = 0;
-					this.stringIndex += 1;
+					if(typeof(this.strings[this.stringsIndex]) == "string"){
+						this.element.innerHTML += this.strings[this.stringsIndex][this.stringIndex];
+						this.delayPassed = 0;
+						this.stringIndex += 1;
+					} else {
+						this.element.innerHTML += this.strings[this.stringsIndex].text + "<br /><br />";
+						this.stringsIndex += 1;
+						this.delayPassed = 0;
+					}
 				}
 			}
 		};
@@ -248,6 +254,9 @@
 		}).filter(function(str){
 			return !!str;
 		}).map(function(str){
+			if(typeof(str) == "object"){
+				return str;
+			};
 			return str.replace('__NAME__', game.player.name).replace('__NAME_UC__', game.player.name.toUpperCase());
 		});
 	}
