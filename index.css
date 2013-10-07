@@ -1,0 +1,101 @@
+html, body{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background-color: black;
+}
+
+div{
+	margin: 0;
+	padding: 0;
+	color: green;
+	font-family: "Courier New", "Courier", monospace;
+	font-size: 20px;
+}
+
+#anim{
+	background-color: black;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+
+#anim2{
+	background-color: white;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+
+}
+
+#output{
+	margin: 0 auto;
+	border: 1px solid green;
+	border-left: none;
+	padding: 20px;
+	width: 800px;
+	margin-left: 200px;
+}
+
+#input{
+	width: 800px;
+	border: 1px solid green;
+	border-top: none;
+	border-left: none;
+	padding: 10px 20px;
+	margin: 0 auto;
+	margin-left: 200px;
+}
+
+.option{
+	width: 146px;
+	float: left;
+	margin-left: 2.5%;
+	margin-right: 2.5%;
+	height: 90%;
+	padding: 6px;
+	color: white;
+	font-size: 18px;
+}
+
+.option-num{
+	display: block;
+	color: green;
+}
+
+.clear{
+	clear: both;
+}
+
+#console{
+	width: 1000px;
+	margin: 0px auto;
+	padding: 20px;
+}
+
+#player{
+	float: left;
+	width: 160px;
+	padding: 20px;
+	border: 1px solid green;
+	font-size: 16px;
+}
+
+input{
+	background-color: black;
+	margin: 0;
+	padding: 6px;
+	border: 1px solid green;
+	font-size: 16px;
+	font-family: "Courier New", "Courier", monospace;
+	color: green;
+}
+
+.heavy{
+	font-size: 1.2em;
+	font-weight: bold;
+}
