@@ -356,6 +356,12 @@ var createScript = function(){return {
 			{
 				text: "On second thought...",
 				state: "mizumo_room_2206"
+			},
+			{
+				text: "Leave Mizumo",
+				callback: function(){
+					game.setState("game_over");
+				}
 			}
 		]
 	},

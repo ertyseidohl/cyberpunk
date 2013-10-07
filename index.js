@@ -3,11 +3,14 @@
 	var states = {
 		beginning: function(game, frame){
 			var anim = document.getElementById("anim");
+			var anim2 = document.getElementById("anim2");
 			if(frame == 0){
+				anim.style.display = "block";
+				anim2.style.display = "block";
 				this.done = 0;
 				this.size = {
-					x: 100,
-					y: 100,
+					x: 0,
+					y: 0,
 					xmax: document.body.clientWidth,
 					ymax: document.body.clientHeight
 				}
@@ -32,8 +35,9 @@
 			anim.style.marginLeft = (-.5 * this.size.x) + "px";
 
 			if(this.done == 2){
-				anim.parentNode.removeChild(anim);
-				document.getElementById("anim2").parentNode.removeChild(document.getElementById("anim2"));
+				document.getElementById("console").style.display = "block";
+				anim.style.display = "none";
+				anim2.style.display = "none";
 				game.setState("playing");
 			}
 
@@ -130,26 +134,31 @@
 
 		},
 		game_over: function(game, frame) {
+			if(frame < 0) return;
 			var anim = document.getElementById("anim");
+			var anim2 = document.getElementById("anim2");
 			if(frame == 0){
 				this.done = 0;
 				this.size = {
-					x: anim.style.width,
-					y: anim.style.height,
-					xmax: document.body.clientWidth,
-					ymax: document.body.clientHeight
-				}
+					x: document.body.clientWidth,
+					y: document.body.clientHeight,
+					xmin: 0,
+					ymin: 0
+				};
+				document.getElementById("console").style.display = "none";
+				anim.style.display = "block";
+				anim2.style.display = "block";
 			}
 
-			this.size.x += Math.random() * 100;
-			this.size.y += Math.random() * 100;
+			this.size.x -= Math.random() * 100;
+			this.size.y -= Math.random() * 100;
 
-			if(this.size.x > this.size.xmax){
-				this.size.x = this.size.xmax;
+			if(this.size.x <= this.size.xmin){
+				this.size.x = this.size.xmin;
 				this.done = 1;
 			}
-			if(this.size.y > this.size.ymax){
-				this.size.y = this.size.ymax;
+			if(this.size.y <= this.size.ymin){
+				this.size.y = this.size.ymin;
 				if(this.done == 1) this.done = 2;
 			}
 
@@ -160,9 +169,8 @@
 			anim.style.marginLeft = (-.5 * this.size.x) + "px";
 
 			if(this.done == 2){
-				anim.parentNode.removeChild(anim);
-				document.getElementById("anim2").parentNode.removeChild(document.getElementById("anim2"));
-				game.setState("playing");
+				this.done = 3;
+				anim.innerHTML = "<input type='button' onclick='document.getElementById(\"anim\").innerHTML = \"\"; game.restart();' id='restart' value='Restart' />";
 			}
 		}
 	}
@@ -245,48 +253,55 @@
 	}
 
 	var Game = function(inId, outId, playerId, opt1Id, opt2Id, opt3Id, opt4Id){
-		this.state = states.beginning;
+		this.restart = function(){
+			this.state = states.beginning;
 
-		this.scriptState = "beginning";
-		this.lastScriptState = "";
+			this.scriptState = "beginning";
+			this.lastScriptState = "";
 
-		this.inEl = document.getElementById(inId);
-		this.outEl = document.getElementById(outId);
-		this.playerEl = document.getElementById(playerId);
+			this.inEl = document.getElementById(inId);
+			this.outEl = document.getElementById(outId);
+			this.playerEl = document.getElementById(playerId);
 
-		this.opt = {
-			1: {
-				element: document.getElementById(opt1Id),
-				callback: null,
-				enabled: false
-			},
-			2: {
-				element: document.getElementById(opt2Id),
-				callback: null,
-				enabled: false
-			},
-			3: {
-				element: document.getElementById(opt3Id),
-				callback: null,
-				enabled: false
-			},
-			4: {
-				element: document.getElementById(opt4Id),
-				callback: null,
-				enabled: false
+			this.opt = {
+				1: {
+					element: document.getElementById(opt1Id),
+					callback: null,
+					enabled: false
+				},
+				2: {
+					element: document.getElementById(opt2Id),
+					callback: null,
+					enabled: false
+				},
+				3: {
+					element: document.getElementById(opt3Id),
+					callback: null,
+					enabled: false
+				},
+				4: {
+					element: document.getElementById(opt4Id),
+					callback: null,
+					enabled: false
+				}
 			}
-		}
 
-		this.player = {
-			inventory: [],
-			name: '',
-			location: '',
-			events: {}
-		};
+			this.player = {
+				inventory: [],
+				name: '',
+				location: '',
+				events: {}
+			};
 
-		this.items = {
-			sb2_keycard: "Mizumo Keycard"
+			this.items = {
+				sb2_keycard: "Mizumo Keycard"
+			}
+
+			this.frame = 0;
+
+			this.typewriter = new TypeWriter();
 		}
+		this.restart();
 
 		this.updatePlayer = function(){
 			var s = '';
@@ -305,10 +320,6 @@
 			s += '</p>';
 			this.playerEl.innerHTML = s;
 		}
-
-		this.frame = 0;
-
-		this.typewriter = new TypeWriter();
 
 		this.loop = function(){
 			this.state.call(null, this, this.frame);
