@@ -34,6 +34,12 @@ var createScript = function(){return {
 			},
 			"Sound and Music: Evan Conway",
 			"Developer-in-training: Matt Golon"
+		],
+		options: [
+			{
+				text: "Back",
+				state: "beginning"
+			}
 		]
 	},
 	mizumo_start: {
@@ -72,7 +78,7 @@ var createScript = function(){return {
 	},
 	mizumo_examine_alert: {
 		location: 'Mizumo HQ, room 2503',
-		color: "#0000ff",
+		color: "blue",
 		text: [
 			"To: __NAME_UC__",
 			"From: JANUS",
@@ -124,7 +130,7 @@ var createScript = function(){return {
 				}
 			},
 			{
-				condition: function(){return game.player.has(game.items.sb2_keycard)},
+				condition: function(){return !(game.player.has(game.items.sb2_keycard))},
 				text: "Get Keycard",
 				callback: function(){
 					game.player.inventory.push(game.items.sb2_keycard);
@@ -155,7 +161,7 @@ var createScript = function(){return {
 		],
 		options: [
 			{
-				condition: function(){return game.player.inventory.indexOf(game.items.sb2_keycard) == -1},
+				condition: function(){return game.player.has(game.items.sb2_keycard)},
 				text: "Get Keycard",
 				state: "mizumo_room_2206_keycard"
 			},
@@ -391,7 +397,7 @@ var createScript = function(){return {
 	mizumo_sb2_arrive: {
 		location: 'Mizumo HQ, Sub-Basement 2',
 		text: [
-			"You step out of the elevator into a dark, dank hallway. A light flickers on around a corner in front of you."
+			"You step out of the elevator into a dark hallway. A light flickers on around a corner in front of you."
 		],
 		options: [
 			{
@@ -424,7 +430,7 @@ var createScript = function(){return {
 		location: 'Mizumo HQ, Sub-Basement 2',
 		text: [
 			"You notice the elvator doors shut behind you with a sudden snap. The lights buzz on and off.",
-			"The elevator location dings to floor 15. How on earth did it get up there so fast?"
+			"You hear the elevator begin to rise behind you."
 		],
 		options: [
 			{
@@ -455,10 +461,26 @@ var createScript = function(){return {
 		location: 'Mizumo HQ, Sub-Basement 2',
 		text: [
 			"You find what seems to be a fresh piece of paper folded atop a small toolbox behind some wires...",
-			"[BROWN] MIZUMO CORP - MAINTENANCE & UPKEEP",
-			"[BROWN] REPAIR TICKET -- SEE BOTTOM FOR ADDITIONAL NOTES",
-			"[BROWN WITH CUSTOM FONT HANDWRITTEN] spent some time workin on the dam box it ain too easy but sure is getin scragly",
-			"[BROWN WITH CUSTOM FONT HANDWRITTEN] worried this dam modern tek is outta hand dam computa messin things up"
+			{
+				text: "MIZUMO CORP - MAINTENANCE & UPKEEP",
+				color: "brown",
+				font: "serif"
+			},
+			{
+				text: "REPAIR TICKET -- SEE BOTTOM FOR ADDITIONAL NOTES",
+				color: "brown",
+				font: "serif"
+			},
+			{
+				text: "spent some time workin on the dam box it ain too easy but sure is getin scragly",
+				color: "brown",
+				font: "sans-serif"
+			},
+			{
+				text: "worried this dam modern tek is outta hand dam computa messin things up",
+				color: "brown",
+				font: "sans-serif"
+			}
 		],
 		options: [
 			{

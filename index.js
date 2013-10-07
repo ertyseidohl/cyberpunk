@@ -110,7 +110,7 @@
 
 			game.typewriter.push(
 				game.outEl,
-				__(script[game.scriptState].text),
+				script[game.scriptState].text,
 				1,
 				function(element){
 					var i = 1;
@@ -180,76 +180,46 @@
 		this.queue = [];
 
 		this.push = function(element, stringObjects, delay, callback){
+			stringObjects = __(stringObjects);
 			var that = this;
-			//strings = strings.map(function(s){return s.split(/(\s)/).filter(Boolean)});
 			this.queue.push({
 				"element": element,
 				"stringObjects": stringObjects,
 				"delay": delay,
 				delayPassed: 0,
 				objectsIndex: 0,
-				stringIndex: 0,
 				loop: that.typeFunction,
 				done: false,
+				finish: false,
 				"callback": callback
 			});
 		};
 
 		this.finish = function(){
 			this.queue.forEach(function(a){
-				a.element.innerHTML = "";
-				for(var i = 0; i < a.strings.length; i++){
-					a.element.innerHTML += a.strings[i];
-					a.element.innerHTML += "<br /><br />";
-				}
-				a.done = true;
+				a.finish = true;
 			});
 		}
-
-		/*
-			(){
-			if(this.done) return;
-			this.delayPassed += 1;
-			if(this.delayPassed == this.delay){
-				if(this.stringIndex == this.strings[this.stringsIndex].length){
-					this.stringIndex = 0;
-					this.stringsIndex ++;
-					this.element.innerHTML += "<br /><br />	";
-				}
-				if(this.stringsIndex == this.strings.length){
-					this.done = true;
-				} else{
-					if(typeof(this.strings[this.stringsIndex]) == "string"){
-						this.element.innerHTML += this.strings[this.stringsIndex][this.stringIndex];
-						this.delayPassed = 0;
-						this.stringIndex += 1;
-					} else {
-						this.element.innerHTML += this.strings[this.stringsIndex].text + "<br /><br />";
-						this.stringsIndex += 1;
-						this.delayPassed = 0;
-					}
-				}
-			}
-		*/
 
 		this.typeFunction = function(){
 			if(this.done) return;
 			this.delayPassed += 1;
-			if(this.delayPassed == this.delay){
+			while(this.delayPassed == this.delay || (this.finish && !this.done)){
+				var obj = this.stringObjects[this.objectsIndex];
 				this.delayPassed = 0;
-				if(this.stringIndex == 0){
-					this.el = document.createElement(this.stringObjects[this.objectsIndex].contain);
-					this.el.style.color = this.stringObjects[this.objectsIndex].color;
-					this.el.style.fontFamily = this.stringObjects[this.objectsIndex].font;
+				if(obj.stringIndex == 0){
+					this.el = document.createElement(obj.contain);
+					if(obj.color) this.el.style.color = obj.color;
+					if(obj.font) this.el.style.fontFamily = obj.font;
 					this.element.appendChild(this.el);
 				}
-				if(this.stringIndex == this.stringObjects[this.objectsIndex].text.length){
+				if(obj.stringIndex == obj.text.length){
 					this.objectsIndex ++;
-					this.stringIndex = 0;
+					obj.stringIndex = 0;
 					if(this.objectsIndex == this.stringObjects.length) this.done = true;
 				} else{
-					this.el.innerHTML += this.stringObjects[this.objectsIndex].text[this.stringIndex];
-					this.stringIndex ++;
+					this.el.innerHTML += obj.text[obj.stringIndex];
+					obj.stringIndex ++;
 				}
 			}
 		};
@@ -272,10 +242,9 @@
 		return strArr.map(function(str){
 			var obj = {
 				text: '',
-				color: 'green',
-				appear: 'type',
 				contain: 'p',
-				font: 'courier new'
+				font: 'courier new',
+				stringIndex: 0
 			}
 			if(typeof(str) == "function"){
 				str = str.call(this);
@@ -338,7 +307,7 @@
 			};
 
 			this.player.has = function(item){
-				return player.inventory.indexOf(item) != -1;
+				return this.inventory.indexOf(item) != -1;
 			}
 
 			this.items = {
