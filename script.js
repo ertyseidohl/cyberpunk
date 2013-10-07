@@ -73,7 +73,7 @@ var createScript = function(){return {
 			"To: __NAME_UC__",
 			"From: JANUS",
 			"Subject: HELP PLEASE",
-			"I'M TRAPPED IN ROOM 0029 IN SUB-BASEMENT 2. IS ANYONE STILL AROUND? I'VE TRIED CALLING SECURITY BUT THEY AREN'T ANSWERING.",
+			"I'M TRAPPED IN ROOM S229 IN SUB-BASEMENT 2. IS ANYONE STILL AROUND? I'VE TRIED CALLING SECURITY BUT THEY AREN'T ANSWERING.",
 			"I KNOW THIS IS TOTALLY AGAINST POLICY, BUT THERE'S A SPARE KEYCARD IN MY DESK (ROOM 2206) IN THE THIRD DRAWER DOWN THAT WILL GET YOU INTO THE BASEMENT.",
 			"I'VE BEEN DOWN HERE A LONG TIME ALREADY AND I REALLY DON'T WANT TO BE HERE UNTIL MONDAY!",
 			"PLEASE HELP ME!",
@@ -388,32 +388,32 @@ var createScript = function(){return {
 		location: 'Mizumo HQ, Sub-Basement 2',
 		text: [
 			"You step out of the elevator into a dark, dank hallway. A light flickers on around a corner in front of you."
-		]
+		],
 		options: [
-		{
-			text: "Walk towards the light"
-			state: "mizumo_sb2_hallway"
-		}
-		{
-			text: "Look around a little more"
-			state: "mizumo_sb2_elevator"
-		}
+			{
+				text: "Walk towards the light",
+				state: "mizumo_sb2_hallway"
+			},
+			{
+				text: "Look around a little more",
+				state: "mizumo_sb2_elevator"
+			}
 		]
 	},
 	mizumo_sb2_hallway: {
 		location: 'Mizumo HQ, Sub-Basement 2',
 		text: [
 			"By the rampant cobwebs and faulty electrical wiring, you determine that no-one has been here in awhile..."
-		]
+		],
 		options: [
-		{
-			text: "Keep walking"
-			state: "mizumo_sb2_room1"
-		}
-		{
-			text: "Look around even more"
-			state: "electrical_box"
-		}
+			{
+				text: "Keep walking",
+				state: "mizumo_sb2_rms"
+			},
+			{
+				text: "Look around even more",
+				state: "electrical_box"
+			}
 		]
 	},
 	mizumo_sb2_elevator: {
@@ -421,12 +421,12 @@ var createScript = function(){return {
 		text: [
 			"You notice the elvator doors shut behind you with a sudden snap. The lights buzz on and off.",
 			"The elevator location dings to floor 15. How on earth did it get up there so fast?"
-		]
+		],
 		options: [
-		{
-			text: "Walk towards the light"
-			state: "mizumo_sb2_hallway"
-		}
+			{
+				text: "Walk towards the light"
+				state: "mizumo_sb2_hallway"
+			}
 		]
 	},
 	electrical_box: {
@@ -436,22 +436,80 @@ var createScript = function(){return {
 			"It is caked in a layer of dust, except for 4 straight lines just large enough to have made out a hand shutting the box."
 		]
 		options: [
-		{
-			text: "Open the box"
-			state: "electrical_box_interior"
+			{
+				text: "Open the box",
+				state: "electrical_box_interior"
 
-		}
-		{
-			text: "This is just bad news. Keep walking"
-			state: "mizumo_sb2_room1"
-		}
+			},
+			{
+				text: "This is just bad news. Keep walking",
+				state: "mizumo_sb2_rms"
+			}
 		]
 	},
 	electrical_box_interior: {
 		location: 'Mizumo HQ, Sub-Basement 2',
 		text: [
-			"You find a.."
+			"You find what seems to be a fresh piece of paper folded atop a small toolbox behind some wires...",
+			"[BROWN] MIZUMO CORP - MAINTENANCE & UPKEEP",
+			"[BROWN] REPAIR TICKET -- SEE BOTTOM FOR ADDITIONAL NOTES",
+			"[BROWN WITH CUSTOM FONT HANDWRITTEN] spent some time workin on the dam box it ain too easy but sure is getin scragly",
+			"[BROWN WITH CUSTOM FONT HANDWRITTEN] worried this dam modern tek is outta hand dam computa messin things up"
+		],
+		options: [
+			{
+				text: "Continue on your way",
+				state: "mizumo_sb2_rms"
+			},
+			{
+				text: "Check the toolbox",
+				state: "mizumo_sb2_flashlight"
+			}
 		]
 
+	},
+	mizumo_sb2_flashlight: {
+		location: 'Mizumo HQ, Sub-Basement 2',
+		text: [
+			"You pick up a small flashlight, maybe it will come in handy later?"
+		],
+		options: [
+			{
+				condition: function(){return !(game.player.has(game.items.flashlight))},
+				text: "Get flashlight",
+				callback: function(){
+					game.player.inventory.push(game.items.flashlight);
+					game.updatePlayer();
+					game.setScriptState("mizumo_sb2_hallway");
+			}
+		]
+
+
+	},
+	mizumo_sb2_rms: {
+
+
+	},
+	mizumo_sb2_rm229_off: {
+		location: 'Mizumo HQ, Sub-Basement 2, Room S229'
+		text: [
+			"You are able to open a door at the end of the hall to a dark room.", 
+			"The faint glow of the hallway light is not enough for you to find even a light switch"
+		],
+		options: [
+			{
+				condition: function(){return game.player.has(game.items.flashlight)},
+					//player has a flashlight
+					text: "Turn on your flashlight and have a look around",
+					state: "mizumo_sb2_rm229_on"
+
+			},
+			{
+				condition: function(){return !(game.player.has(game.items.flashlight))},
+					//player has no flashlight
+					text: "It is simply too dark, you'll have to turn back or risk another horrific ankle injury",
+					state: "mizumo_sb2_hallway"
+			}
+		]
 	}
 }};
