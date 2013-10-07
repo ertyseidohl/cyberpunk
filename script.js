@@ -387,7 +387,71 @@ var createScript = function(){return {
 	mizumo_sb2_arrive: {
 		location: 'Mizumo HQ, Sub-Basement 2',
 		text: [
-			""
+			"You step out of the elevator into a dark, dank hallway. A light flickers on around a corner in front of you."
 		]
+		options: [
+		{
+			text: "Walk towards the light"
+			state: "mizumo_sb2_hallway"
+		}
+		{
+			text: "Look around a little more"
+			state: "mizumo_sb2_elevator"
+		}
+		]
+	},
+	mizumo_sb2_hallway: {
+		location: 'Mizumo HQ, Sub-Basement 2',
+		text: [
+			"By the rampant cobwebs and faulty electrical wiring, you determine that no-one has been here in awhile..."
+		]
+		options: [
+		{
+			text: "Keep walking"
+			state: "mizumo_sb2_room1"
+		}
+		{
+			text: "Look around even more"
+			state: "electrical_box"
+		}
+		]
+	},
+	mizumo_sb2_elevator: {
+		location: 'Mizumo HQ, Sub-Basement 2',
+		text: [
+			"You notice the elvator doors shut behind you with a sudden snap. The lights buzz on and off.",
+			"The elevator location dings to floor 15. How on earth did it get up there so fast?"
+		]
+		options: [
+		{
+			text: "Walk towards the light"
+			state: "mizumo_sb2_hallway"
+		}
+		]
+	},
+	electrical_box: {
+		location: 'Mizumo HQ, Sub-Basement 2',
+		text: [
+			"There is a vintage electrical box to your right, emmiting a slow and soothing hum.",
+			"It is caked in a layer of dust, except for 4 straight lines just large enough to have made out a hand shutting the box."
+		]
+		options: [
+		{
+			text: "Open the box"
+			state: "electrical_box_interior"
+
+		}
+		{
+			text: "This is just bad news. Keep walking"
+			state: "mizumo_sb2_room1"
+		}
+		]
+	},
+	electrical_box_interior: {
+		location: 'Mizumo HQ, Sub-Basement 2',
+		text: [
+			"You find a.."
+		]
+
 	}
 }};
