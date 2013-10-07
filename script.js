@@ -88,7 +88,7 @@ var createScript = function(){return {
 	mizumo_room_2206: {
 		location: 'Mizumo HQ, room 2206',
 		text: [
-			"Room 2206 is an office on the 22nd floor - three floors down from you. It's a smaller office than yours, for what that's worth.",
+			"Room 2206 is a noffice on the 22nd floor - three floors down from you. It's a smaller office than yours, for what that's worth.",
 			"You have an uneasy feeling, but it's probably becuase most of the lights are off here and there's nobody around."
 		],
 		options: [
@@ -134,11 +134,7 @@ var createScript = function(){return {
 			{
 				condition: function(){return game.player.inventory.indexOf(game.items.sb2_keycard) == -1},
 				text: "Get Keycard",
-				callback: function(){
-					game.player.inventory.push(game.items.sb2_keycard);
-					game.updatePlayer();
-					game.setScriptState("mizumo_room_2206_keycard");
-				}
+				state: "mizumo_room_2206_keycard"
 			},
 			{
 				condition: function(){return game.player.events["mizumo_opsec_line_dead"] == undefined},
@@ -165,10 +161,7 @@ var createScript = function(){return {
 		options: [
 			{
 				text: "Tell them about the person in the basement",
-				callback: function(){
-					game.setScriptState("mizumo_call_opsec_tell");
-					game.player.events["mizumo_opsec_line_dead"] = true;
-				}
+				state: "mizumo_call_opsec_tell"
 			},
 			{
 				text: "Nevermind",
@@ -178,6 +171,9 @@ var createScript = function(){return {
 	},
 	mizumo_call_opsec_tell: {
 		location: undefined,
+		callfore: function(){
+			game.player.events["mizumo_opsec_line_dead"] = true;
+		},
 		text: [
 			"You're about to start explaining, when the line suddenly goes dead. Weird."
 		],
@@ -203,11 +199,7 @@ var createScript = function(){return {
 			{
 				condition: function(){return game.player.location == "Mizumo HQ, room 2206" && game.player.inventory.indexOf(game.items.sb2_keycard) == -1},
 				text: "Get Keycard from Desk",
-				callback: function(){
-					game.player.inventory.push(game.items.sb2_keycard);
-					game.updatePlayer();
-					game.setScriptState("mizumo_room_2206_keycard");
-				}
+				state: "mizumo_room_2206_keycard"
 			},
 			{
 				condition: function(){return game.player.location == "Mizumo HQ, room 2503"},
@@ -234,11 +226,7 @@ var createScript = function(){return {
 				condition: function(){return game.player.location == "Mizumo HQ, room 2206" && game.player.inventory.indexOf(game.items.sb2_keycard) == -1},
 				//player is in downstairs office, no keycard
 				text: "Get Keycard from Desk",
-				callback: function(){
-					game.player.inventory.push(game.items.sb2_keycard);
-					game.updatePlayer();
-					game.setScriptState("mizumo_room_2206_keycard");
-				}
+				state: "mizumo_room_2206_keycard",
 			},
 			{
 				condition: function(){return game.player.location == "Mizumo HQ, room 2206" && game.player.inventory.indexOf(game.items.sb2_keycard) == -1},
@@ -290,11 +278,7 @@ var createScript = function(){return {
 			{
 				condition: function(){return game.player.location == "Mizumo HQ, room 2206" && game.player.inventory.indexOf(game.items.sb2_keycard) == -1},
 				text: "Get Keycard from Desk",
-				callback: function(){
-					game.player.inventory.push(game.items.sb2_keycard);
-					game.updatePlayer();
-					game.setScriptState("mizumo_room_2206_keycard");
-				}
+				state: "mizumo_room_2206_keycard"
 			},
 			{
 				condition: function(){return game.player.location == "Mizumo HQ, room 2503"},
@@ -306,6 +290,10 @@ var createScript = function(){return {
 	},
 	mizumo_room_2206_keycard: {
 		location: 'Mizumo HQ, room 2206',
+		callfore: function(){
+			game.player.inventory.push(game.items.sb2_keycard);
+			game.updatePlayer();
+		},
 		text: [
 			"You pick up the keycard. It looks like your own, except that their department code is \"AIR\", which you've never heard of. The name on the keycard is \"Jason Landes\".",
 			"The sub-basements have always been an in-joke at Mizumo, that there's strange research happening there, but you've always assumed it was just poking fun at the corporation.",
@@ -360,15 +348,21 @@ var createScript = function(){return {
 		]
 	},
 	mizumo_leaving: {
-		location: 'Mizumo Front Lobby',
+		location: 'Mizumo HQ, Front Lobby',
 		text: [
-			"You leave."
+			"You step out of the elevator into the cold "
 		],
 		options: [
 			{
 				text: "On second thought...",
 				state: "mizumo_room_2206"
 			}
+		]
+	},
+	mizumo_sb2_arrive: {
+		location: 'Mizumo HQ, Sub-Basement 2',
+		text: [
+			""
 		]
 	}
 }};

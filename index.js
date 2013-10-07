@@ -89,6 +89,10 @@
 				return;
 			}
 
+			if(script[game.scriptState].callfore){
+				script[game.scriptState].callfore.call(this);
+			}
+
 			if(script[game.scriptState].color){
 				game.outEl.style.color = script[game.scriptState].color;
 			} else{
