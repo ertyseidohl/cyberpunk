@@ -26,7 +26,11 @@ var createScript = function(){return {
 		text: [
 			"A Handprint Industries Game",
 			{
-				text: "<span style='color:#ff0000'>Lead Developer: Erty Seidel</span>",
+				text: "Lead Developer: Erty Seidel",
+				color: "red",
+				appear: "type",
+				contain: "p",
+				font-family: "cursive"
 			},
 			"Sound and Music: Evan Conway",
 			"Developer-in-training: Matt Golon"
@@ -120,7 +124,7 @@ var createScript = function(){return {
 				}
 			},
 			{
-				condition: function(){return game.player.inventory.indexOf(game.items.sb2_keycard) == -1},
+				condition: function(){return game.player.has(game.items.sb2_keycard)},
 				text: "Get Keycard",
 				callback: function(){
 					game.player.inventory.push(game.items.sb2_keycard);
