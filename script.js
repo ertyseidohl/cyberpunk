@@ -488,10 +488,26 @@ var createScript = function(){return {
 				}
 			}
 		]
-
 	},
 	mizumo_sb2_rms: {
-
+		location: 'Mizumo HQ, Sub-Basement 2',
+		text: [
+			"You come to a junction with several doors..."
+		],
+		options: [
+			{
+				text: "Enter Room S228",
+				state: "mizumo_sb2_lockeddoor"
+			},
+			{
+				text: "Enter Room S229",
+				state: "mizumo_sb2_rm229_off"
+			},
+			{
+				text: "Enter Room S230",
+				state: "mizumo_sb2_rm230"
+			}
+		]
 
 	},
 	mizumo_sb2_rm229_off: {

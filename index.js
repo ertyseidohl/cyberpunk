@@ -342,7 +342,8 @@
 			}
 
 			this.items = {
-				sb2_keycard: "Mizumo Keycard"
+				sb2_keycard: "Mizumo Keycard",
+				flashlight: "Flashlight"
 			}
 
 			this.frame = 0;
