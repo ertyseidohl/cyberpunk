@@ -99,3 +99,8 @@ input{
 	font-size: 1.2em;
 	font-weight: bold;
 }
+
+#player ul{
+	margin-left: 0;
+	padding-left: 20px;
+}
