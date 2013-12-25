@@ -1,18 +1,5 @@
-
-
-var createScript = function(items, events){
-	var items = {
-		smartphone: "Smartphone",
-		sb2_keycard: "Mizumo Keycard",
-		multitool: "Multitool"
-	};
-	var events = {
-		janus_message_read: "",
-		mizumo_2206_snooped: "",
-		mizumo_opsec_called: "",
-		visited_room_2206: ""
-	};
-	return {
+;(function(exports){
+	exports.script = {
 		beginning:{
 			callfore: function(){
 				var anim = document.getElementById("anim");
@@ -28,6 +15,7 @@ var createScript = function(items, events){
 				}
 			},
 			loop: function(frame){
+				if(this.done == 2) return;
 				var anim = document.getElementById("anim");
 				var anim2 = document.getElementById("anim2");
 				this.size.x += Math.random() * 100;
@@ -52,7 +40,6 @@ var createScript = function(items, events){
 					document.getElementById("console").style.display = "block";
 					anim.style.display = "none";
 					anim2.style.display = "none";
-					game.setState("playing");
 				}
 			},
 			text: [
@@ -129,42 +116,35 @@ var createScript = function(items, events){
 					1,
 					function(element){
 						var s = '';
-						s += "<form id='sessionform'>"
 						s += "Username: <input type='text' id='player-name' value='debug' autocomplete='off'/>";
 						s += "<br /><br />";
 						s += "Password: <input type='password' id='player-password' value='debug' autocomplete='off'/>";
 						s += "<br /><br />";
-						s += "Click <input type='submit' value='here'/> to start this session";
-						s += "</form>";
+						s += "Click <input type='button' id='player-submit' value='here'/> to start this session";
 						game.outEl.innerHTML += s;
-						var form = document.getElementById('sessionform');
-						if (form.attachEvent) {
-							form.attachEvent("submit", createUser);
-						} else {
-							form.addEventListener("submit", createUser);
-						}
+						var submit = document.getElementById('player-submit');
+						submit.onclick = function(){
+							var nameEl = document.getElementById("player-name");
+							var passwordEl = document.getElementById("player-password");
+							if(nameEl.value.length == 0){
+								nameEl.style.backgroundColor = "#220000";
+							}
+							if(passwordEl.value.length == 0){
+								passwordEl.style.backgroundColor = "#220000";
+							}
+							if(nameEl.value.length > 0 && passwordEl.value.length > 0){
+								game.player.name = nameEl.value;
+								game.player.password = passwordEl.value;
+								game.setState("mizumo_start");
+								game.updatePlayer();
+							}
+						};
 					}
 				);
-			},
-			callback: function(){
-				var nameEl = document.getElementById("player-name");
-				var passwordEl = document.getElementById("player-password");
-				if(nameEl.value.length == 0){
-					nameEl.style.backgroundColor = "#220000";
-				}
-				if(passwordEl.value.length == 0){
-					passwordEl.style.backgroundColor = "#220000";
-				}
-				if(nameEl.value.length > 0 && passwordEl.value.length > 0){
-					game.player.name = nameEl.value;
-					game.player.password = passwordEl.value;
-					game.setState("mizumo_start");
-					game.updatePlayer();
-				}
 			}
 		},
 		credits: {
-			location: "Boulder, Colorado",
+			location: "Boulder, CO and Brooklyn, NY",
 			callfore: function(){
 				game.player.name = "Handprint Industries";
 				game.player.inventory = ["Awesomeness", "Silly Hats"];
@@ -220,7 +200,7 @@ var createScript = function(items, events){
 		mizumo_start: {
 			location: 'Mizumo HQ, room 2503',
 			callfore: function(){
-				player.get(items.smartphone);
+				game.player.get(game.items.smartphone);
 			},
 			text: [
 				"Welcome, __NAME__",
@@ -257,7 +237,7 @@ var createScript = function(items, events){
 		mizumo_examine_alert: {
 			location: 'Mizumo HQ, room 2503',
 			callfore: function(){
-				game.player.happen(events.jansus_message_read);
+				game.player.happen("janus_message_read");
 			},
 			color: "blue",
 			text: [
@@ -284,12 +264,12 @@ var createScript = function(items, events){
 					state: "mizumo_leaving"
 				},
 				{
-					condition: function(){return !(game.player.has(events.mizumo_opsec_called))},
+					condition: function(){return !(game.player.has(game.events.mizumo_opsec_called))},
 					text: "Make OpSec deal with it",
 					state: "mizumo_call_opsec"
 				},
 				{
-					condition: function(){return game.player.has(events.mizumo_opsec_called)},
+					condition: function(){return game.player.has(game.events.mizumo_opsec_called)},
 					text: "Call the Opsec office again",
 					state: "mizumo_call_opsec"
 				}
@@ -298,7 +278,7 @@ var createScript = function(items, events){
 		mizumo_room_2206: {
 			location: 'Mizumo HQ, room 2206',
 			callfore: function(){
-				game.player.happen(events.visited_room_2206);
+				game.player.happen("visited_room_2206");
 			},
 			text: [
 				"Room 2206 is an office on the 22nd floor - three floors down from you. It's a smaller office than yours, for what that's worth.",
@@ -306,17 +286,17 @@ var createScript = function(items, events){
 			],
 			options: [
 				{
-					condition: function(){return !(game.player.has(events.mizumo_2206_snooped))},
+					condition: function(){return !(game.player.has(game.events.mizumo_2206_snooped))},
 					text: "Look Around",
 					state: "mizumo_room_2206_examine"
 				},
 				{
-					condition: function(){return !(game.player.has(items.sb2_keycard))},
+					condition: function(){return !(game.player.has(game.items.sb2_keycard))},
 					text: "Get Keycard",
 					state: "mizumo_room_2206_keycard"
 				},
 				{
-					condition: function(){return !(game.player.has(events.mizumo_2206_snooped))},
+					condition: function(){return !(game.player.has(game.events.mizumo_2206_snooped))},
 					text: "Snoop around in the office",
 					state: "mizumo_room_2206_examine"
 				},
@@ -329,26 +309,21 @@ var createScript = function(items, events){
 		mizumo_room_2206_examine: {
 			location: 'Mizumo HQ, room 2206',
 			callfore: function(){
-				game.player.happen(events.mizumo_2206_snooped);
+				game.player.happen("mizumo_2206_snooped");
 			},
 			text: [
 				"You hear the small whine of something mechanical behind you, and you whip around. You see a security camera zooming in on you. Idiots in Opsec have time to watch you on the camera but not save people in the basement.",
-				function(){if(!game.player.has(events.mizumo_opsec_called)) return "Come to think of it, you could probably just call Opsec and have them rescue James or whoever they were."},
+				function(){if(!game.player.has(game.events.mizumo_opsec_called)) return "Come to think of it, you could probably just call Opsec and have them rescue James or whoever they were."},
 				"You notice that this room seems... almost too empty for someone to be working in it. There's barely anything on the desk. Either way, it looks like the keycard should be where they said."
 			],
 			options: [
 				{
-					condition: function(){return !(game.player.has(items.sb2_keycard))},
+					condition: function(){return !(game.player.has(game.items.sb2_keycard))},
 					text: "Get Keycard",
 					state: "mizumo_room_2206_keycard"
 				},
 				{
-					condition: function(){return !(game.player.has(events.mizumo_opsec_called))},
-					text: "Call the Opsec office",
-					state: "mizumo_call_opsec"
-				},
-				{
-					condition: function(){return !(game.player.has(events.mizumo_opsec_called))},
+					condition: function(){return !(game.player.has(game.events.mizumo_opsec_called))},
 					text: "Call the Opsec office",
 					state: "mizumo_call_opsec"
 				},
@@ -362,15 +337,18 @@ var createScript = function(items, events){
 			location: undefined,
 			text: [
 				{
+					text: "You pick up your relic of a desk phone, and dial the extension for Operations Security."
+				},
+				{
 					text: "\"Thank you for calling Mizumo Operations Security Office. For Emergencies, press 1. For Non-emergencies, press 2.\"",
 					color: "red"
 				},
 				function(){
-					if (!(game.player.has(events.mizumo_opsec_called)))
+					if (!(game.player.has(game.events.mizumo_opsec_called)))
 					return "Oh, right. OpSec goes home at 6pm like everyone else.";
 				},
 				function(){
-					if (!(game.player.has(events.mizumo_opsec_called)))
+					if (!(game.player.has(game.events.mizumo_opsec_called)))
 					return "You'd think a multi-million dollar corporation would have 24-hour security. But no, it's this automated system.";
 				}
 			],
@@ -392,7 +370,7 @@ var createScript = function(items, events){
 		mizumo_call_opsec_non_emergencies: {
 			location: undefined,
 			callfore: function(){
-				game.player.events[events.mizumo_opsec_called] = true;
+				game.player.happen("mizumo_opsec_called");
 			},
 			text: [
 				{
@@ -416,7 +394,7 @@ var createScript = function(items, events){
 					state: "mizumo_elevator_locked"
 				},
 				{
-					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(items.sb2_keycard))},
+					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb2_keycard))},
 					text: "Get Keycard from Desk",
 					state: "mizumo_room_2206_keycard"
 				},
@@ -437,7 +415,7 @@ var createScript = function(items, events){
 		mizumo_call_opsec_emergencies: {
 			location: undefined,
 			callfore: function(){
-				game.player.happen(events.mizumo_opsec_called);
+				game.player.happen("mizumo_opsec_called");
 			},
 			text: [
 				{
@@ -462,7 +440,7 @@ var createScript = function(items, events){
 					state: "mizumo_elevator_locked"
 				},
 				{
-					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(items.sb2_keycard))},
+					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb2_keycard))},
 					text: "Get Keycard from Desk",
 					state: "mizumo_room_2206_keycard"
 				},
@@ -491,25 +469,25 @@ var createScript = function(items, events){
 			],
 			options: [
 				{
-					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(items.sb2_keycard))},
+					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb2_keycard))},
 					//player is in downstairs office, no keycard
 					text: "Get Keycard from Desk",
 					state: "mizumo_room_2206_keycard",
 				},
 				{
-					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(items.sb2_keycard))},
+					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb2_keycard))},
 					//player is in downstairs office, no keycard
 					text: "Go to Elevator",
 					state: "mizumo_elevator_locked"
 				},
 				{
-					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && game.player.has(items.sb2_keycard)},
+					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && game.player.has(game.items.sb2_keycard)},
 					//player is in downstairs office, keycard
 					text: "Go to Elevator",
 					state: "mizumo_elevator_locked"
 				},
 				{
-					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && game.player.has(items.sb2_keycard)},
+					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && game.player.has(game.items.sb2_keycard)},
 					//player is in downstairs office, keycard
 					text: "Not worth losing your job",
 					state: "mizumo_leaving"
@@ -532,7 +510,7 @@ var createScript = function(items, events){
 		mizumo_room_2206_keycard: {
 			location: 'Mizumo HQ, room 2206',
 			callfore: function(){
-				game.player.get(items.sb2_keycard);
+				game.player.get(game.items.sb2_keycard);
 			},
 			text: [
 				"You pick up the keycard. It looks like your own, except their department code is \"AIR\", which you've never heard of. The name on the keycard is \"Jason Landes\".",
@@ -557,17 +535,17 @@ var createScript = function(items, events){
 			],
 			options: [
 				{
-					condition: function(){return game.player.has(events.visited_room_2206)},
+					condition: function(){return game.player.has(game.events.visited_room_2206)},
 					text: "Return to Room 2206",
 					state: "mizumo_room_2206"
 				},
 				{
-					condition: function(){return !(game.player.has(events.visited_room_2206))},
+					condition: function(){return !(game.player.has(game.events.visited_room_2206))},
 					text: "Return to your office",
 					state: "mizumo_return_to_desk"
 				},
 				{
-					condition: function(){return (game.player.has(items.sb2_keycard))},
+					condition: function(){return (game.player.has(game.items.sb2_keycard))},
 					text: "Use Mizumo Keycard",
 					state: "mizumo_elevator_unlocked"
 				}
@@ -600,12 +578,12 @@ var createScript = function(items, events){
 			],
 			options: [
 				{
-					condition: function(){return game.player.has(events.visited_room_2206)},
+					condition: function(){return game.player.has(game.events.visited_room_2206)},
 					text: "On second thought...",
 					state: "mizumo_room_2206"
 				},
 				{
-					condition: function(){return !(game.player.has(events.visited_room_2206))},
+					condition: function(){return !(game.player.has(game.events.visited_room_2206))},
 					text: "On second thought...",
 					state: "mizumo_return_to_desk"
 				},
@@ -638,22 +616,22 @@ var createScript = function(items, events){
 		mizumo_sb2_arrive: {
 			location: "Mizumo HQ, Sub-Basement 2",
 			checkpoint: {
-				set: function(){
+				callback: function(){
 					game.player.name = "debug";
 				},
 				player_required_inventory: [
-					items.smartphone,
-					items.sb2_keycard
+					game.items.smartphone,
+					game.items.sb2_keycard
 				],
 				player_optional_inventory: [
 					//none
 				],
 				player_required_events: [
-					"mizumo_opsec_called",
 					"janus_message_read",
 					"visited_room_2206"
 				],
 				player_optional_events: [
+					"mizumo_opsec_called",
 					"mizumo_2206_snooped"
 				],
 				script_state: "mizumo_sb2_arrive"
@@ -695,7 +673,8 @@ var createScript = function(items, events){
 				},
 				{
 					text: "Use your cell phone and call for help",
-					state: "mizumo_sb2_cellphone"
+					state: "mizumo_sb2_cellphone",
+					condition: function(){return !game.player.has(game.events.use_sb2_cellphone)}
 				}
 			]
 		},
@@ -713,6 +692,11 @@ var createScript = function(items, events){
 				{
 					text: "Look around near the elevator",
 					state: "electrical_box"
+				},
+				{
+					text: "Use your cell phone and call for help",
+					state: "mizumo_sb2_cellphone",
+					condition: function(){return !game.player.has(game.events.use_sb2_cellphone)}
 				}
 			]
 		},
@@ -783,7 +767,7 @@ var createScript = function(items, events){
 				"You pick up a small multitool, maybe it will come in handy later?"
 			],
 			callfore: function(){
-				game.player.get(items.multitool);
+				game.player.get(game.items.multitool);
 			},
 			options: [
 				{
@@ -799,19 +783,22 @@ var createScript = function(items, events){
 			],
 			options: [
 				{
-					text: "Enter Room S228",
+					text: "Return to the elevator",
+					state: "mizumo_sb2_elevator"
+				},
+				{
+					text: "Enter room S228",
 					state: "mizumo_sb2_lockeddoor"
 				},
 				{
-					text: "Enter Room S229",
+					text: "Enter room S229",
 					state: "mizumo_sb2_rm229"
 				},
 				{
-					text: "Enter Room S230",
+					text: "Enter room S230",
 					state: "mizumo_sb2_rm230"
 				}
 			]
-
 		},
-	};
-};
+	}
+})(game);
