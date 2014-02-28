@@ -49,6 +49,14 @@
 		game.updatePlayer();
 	};
 
+	Player.prototype.lose = function(item){
+		if(!item) throw new Error("Inventory Error: item is not an object");
+		console.log("LOST " + item);
+		if(!this.has(item)) throw new Error ("Inventory Error: Player cannot lose " + item);
+		this.inventory[item] = false;
+		game.updatePlayer();
+	}
+
 	Player.prototype.has = function(item){
 		return this.inventory[item] == true || this.events[item] == true;
 	};

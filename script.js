@@ -475,35 +475,22 @@
 					state: "mizumo_room_2206_keycard",
 				},
 				{
-					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb2_keycard))},
-					//player is in downstairs office, no keycard
+					condition: function(){return game.player.location == "Mizumo HQ, room 2206"},
 					text: "Go to Elevator",
 					state: "mizumo_elevator_locked"
 				},
 				{
-					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && game.player.has(game.items.sb2_keycard)},
-					//player is in downstairs office, keycard
-					text: "Go to Elevator",
+					condition: function(){return game.player.location == "Mizumo HQ, room 2503"},
+					//player is in their own office
+					text: "Ignore the message - go home",
 					state: "mizumo_elevator_locked"
-				},
-				{
-					condition: function(){return game.player.location == "Mizumo HQ, room 2206" && game.player.has(game.items.sb2_keycard)},
-					//player is in downstairs office, keycard
-					text: "Not worth losing your job",
-					state: "mizumo_leaving"
-				},
+				}
 				{
 					condition: function(){return game.player.location == "Mizumo HQ, room 2503"},
 					//player is in their own office
 					text: "Go to Room 2206",
 					state: "mizumo_room_2206"
 				},
-				{
-					condition: function(){return game.player.location == "Mizumo HQ, room 2503"},
-					//player is in their own office
-					text: "Ignore the message - go home",
-					state: "mizumo_leaving"
-				}
 			]
 
 		},
@@ -513,13 +500,14 @@
 				game.player.get(game.items.sb2_keycard);
 			},
 			text: [
-				"You pick up the keycard. It looks like your own, except their department code is \"AIR\", which you've never heard of. The name on the keycard is \"Jason Landes\".",
-				"The sub-basements have always been an in-joke at Mizumo, that there's strange research happening there, but you've always assumed it was just poking fun at the corporation.",
-				"Well, now might be your chance to find out."
+				"You pick up the keycard. It looks like your own, except their department code is \"AIRT\", which you've never heard of. The name on the keycard is \"Jason Landes\".",
 			],
 			options: [
 				{
-					text: "Not worth losing your job",
+					text: "Put the keycard back and go home",
+					callback: function(){
+						game.player.lose(game.items.sb2_keycard);
+					},
 					state: "mizumo_leaving"
 				},
 				{
@@ -531,9 +519,15 @@
 		mizumo_elevator_locked: {
 			location: 'Mizumo HQ, Service Elevator 07b',
 			text: [
-				"You step into the elevator. It looks like there are three sub-basements, but there are small lock icons near the buttons, and the elevator doesn't respond if you press them.",
+				"You press the button to call an elevator, and one immediately opens behind you."
+				//todo
+
 			],
 			options: [
+				{
+					text: "Go to front lobby",
+					state: "mizumo_leaving"
+				}
 				{
 					condition: function(){return game.player.has(game.events.visited_room_2206)},
 					text: "Return to Room 2206",
@@ -566,27 +560,17 @@
 					state: "mizumo_sb2_arrive"
 				},
 				{
-					text: "Last chance to wimp out",
+					text: "Go to ground floor and leave",
 					state: "mizumo_leaving"
 				}
 			]
 		},
 		mizumo_leaving: {
-			location: 'Mizumo HQ, Front Lobby',
+			location: 'Mizumo HQ, Service Elevator 07b',
 			text: [
-				"You step out of the elevator into the cold front lobby of the Mizumo Headquarters building. Outside, the city is alive and bustling. Through the large glass doors, you see the "
+				""
 			],
 			options: [
-				{
-					condition: function(){return game.player.has(game.events.visited_room_2206)},
-					text: "On second thought...",
-					state: "mizumo_room_2206"
-				},
-				{
-					condition: function(){return !(game.player.has(game.events.visited_room_2206))},
-					text: "On second thought...",
-					state: "mizumo_return_to_desk"
-				},
 				{
 					text: "Leave Mizumo",
 					callback: function(){
@@ -759,7 +743,6 @@
 					state: "mizumo_sb2_multitool"
 				}
 			]
-
 		},
 		mizumo_sb2_multitool: {
 			location: 'Mizumo HQ, Sub-Basement 2',
