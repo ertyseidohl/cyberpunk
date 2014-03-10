@@ -83,15 +83,20 @@
 					callback: null,
 					enabled: false
 				};
-				this.opt[i].element.onclick = function() {
-					game.keyListener(48 + i);
-				};
+				this.opt[i].element.onclick = function(j) {
+					return function() {
+						return game.keyListener(48 + j);
+					};
+				}(i);
 			}
+
+			this.outEl.onclick = function() {
+				this.typewriter.finish();
+			}.bind(this);
 
 			this.player = new Player();
 
 			this.setOptions({});
-			this.flow();
 		};
 	};
 
@@ -205,15 +210,6 @@
 		this.frame = -1;
 		this.outEl.innerHTML = "";
 		this.setOptions({});
-	};
-
-	Game.prototype.flow = function() {
-		var height = document.body.clientHeight;
-		var inHeight = 100;
-		var outHeight = height - 20 - 20 - 10 - 10 - 4 - 40 - inHeight;
-		this.outEl.style.height = outHeight + "px";
-		this.inEl.style.height = inHeight + "px";
-		this.playerEl.style.height = outHeight + inHeight + 10 + 10 + 1 + "px";
 	};
 
 	Game.prototype.setOptions = function(options) {

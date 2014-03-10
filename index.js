@@ -35,7 +35,3 @@ function onReady ( callback ) {
 }
 
 onReady(init);
-
-window.addEventListener('resize', function(event) {
-  game.flow();
-});

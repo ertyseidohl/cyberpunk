@@ -1,7 +1,7 @@
 ;(function(exports) {
 var Typewriter = function() {
 	this.queue = [];
-}
+};
 
 Typewriter.prototype.push = function(element, stringObjects, delay, callback) {
 	stringObjects = __(stringObjects);
@@ -21,13 +21,13 @@ Typewriter.prototype.push = function(element, stringObjects, delay, callback) {
 
 Typewriter.prototype.clear = function() {
 	this.queue = [];
-}
+};
 
 Typewriter.prototype.finish = function() {
 	this.queue.forEach(function(a) {
 		a.finish = true;
 	});
-}
+};
 
 Typewriter.prototype.typeFunction = function() {
 	if(this.done) return;
@@ -35,7 +35,7 @@ Typewriter.prototype.typeFunction = function() {
 	while(this.delayPassed == this.delay || (this.finish && !this.done)) {
 		var obj = this.stringObjects[this.objectsIndex];
 		this.delayPassed = 0;
-		if(obj.stringIndex == 0) {
+		if(obj.stringIndex === 0) {
 			this.el = document.createElement(obj.contain);
 			if(obj.color) this.el.style.color = obj.color;
 			if(obj.font) this.el.style.fontFamily = obj.font;
@@ -55,7 +55,7 @@ Typewriter.prototype.typeFunction = function() {
 				this.el.innerHTML += obj.text;
 				obj.stringIndex += obj.text.length;
 			} else{
-				throw new Error("The 'appear' value is incorrect (index.js, 231). Text was: " + obj.text);
+				throw new Error("The 'appear' value is incorrect. Text was: " + obj.text);
 			}
 		}
 	}
@@ -65,7 +65,7 @@ Typewriter.prototype.loop = function() {
 	for(var i = 0; i < this.queue.length; i++) {
 		this.queue[i].loop();
 		if(this.queue[i].done) {
-			if(this.queue[i].callback != undefined) {
+			if(this.queue[i].callback !== undefined) {
 				this.queue[i].callback.call(game, this.queue[i]);
 			}
 			this.queue.splice(i, 1);

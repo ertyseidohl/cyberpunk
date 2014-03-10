@@ -187,7 +187,7 @@
 					contain: "h4"
 				},
 				{
-					text: "Jorge Seidel"
+					text: "Jorge Seidel, Levi Satter"
 				}
 			],
 			options: [
@@ -242,13 +242,13 @@
 			color: "blue",
 			text: [
 				"To: __NAME_UC__",
-				"From: JANUS",
+				"From: JASON LANDES",
 				"Subject: HELP PLEASE",
-				"I'M TRAPPED IN ROOM S229 IN SUB-BASEMENT 2. IS ANYONE STILL AROUND? I'VE TRIED CALLING SECURITY BUT THEY AREN'T ANSWERING.",
+				"I'M TRAPPED IN ROOM S429 IN Sub-Basement 4. IS ANYONE STILL AROUND? I'VE TRIED CALLING SECURITY BUT THEY AREN'T ANSWERING.",
 				"I KNOW THIS IS TOTALLY AGAINST POLICY, BUT THERE'S A SPARE KEYCARD IN MY DESK (ROOM 2206) IN THE THIRD DRAWER DOWN THAT WILL GET YOU INTO THE BASEMENT.",
 				"I'VE BEEN DOWN HERE A LONG TIME ALREADY AND I REALLY DON'T WANT TO BE HERE UNTIL MONDAY!",
 				"PLEASE HELP ME!",
-				"JANUS"
+				"JASON"
 			],
 			options: [
 				{
@@ -257,7 +257,7 @@
 				},
 				{
 					text: "Go to Elevator",
-					state: "mizumo_elevator_locked"
+					state: "mizumo_elevator_call"
 				},
 				{
 					text: "Ignore Message",
@@ -291,7 +291,7 @@
 					state: "mizumo_room_2206_examine"
 				},
 				{
-					condition: function() {return !(game.player.has(game.items.sb2_keycard));},
+					condition: function() {return !(game.player.has(game.items.sb4_keycard));},
 					text: "Get Keycard",
 					state: "mizumo_room_2206_keycard"
 				},
@@ -302,7 +302,7 @@
 				},
 				{
 					text: "Go to Elevator",
-					state: "mizumo_elevator_locked"
+					state: "mizumo_elevator_call"
 				}
 			]
 		},
@@ -318,7 +318,7 @@
 			],
 			options: [
 				{
-					condition: function() {return !(game.player.has(game.items.sb2_keycard));},
+					condition: function() {return !(game.player.has(game.items.sb4_keycard));},
 					text: "Get Keycard",
 					state: "mizumo_room_2206_keycard"
 				},
@@ -329,7 +329,7 @@
 				},
 				{
 					text: "Go to Elevator",
-					state: "mizumo_elevator_locked"
+					state: "mizumo_elevator_call"
 				}
 			]
 		},
@@ -391,10 +391,10 @@
 				{
 					condition: function() {return game.player.location == "Mizumo HQ, room 2206";},
 					text: "Go to Elevator",
-					state: "mizumo_elevator_locked"
+					state: "mizumo_elevator_call"
 				},
 				{
-					condition: function() {return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb2_keycard));},
+					condition: function() {return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb4_keycard));},
 					text: "Get Keycard from Desk",
 					state: "mizumo_room_2206_keycard"
 				},
@@ -437,10 +437,10 @@
 				{
 					condition: function() {return game.player.location == "Mizumo HQ, room 2206";},
 					text: "Go to Elevator",
-					state: "mizumo_elevator_locked"
+					state: "mizumo_elevator_call"
 				},
 				{
-					condition: function() {return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb2_keycard));},
+					condition: function() {return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb4_keycard));},
 					text: "Get Keycard from Desk",
 					state: "mizumo_room_2206_keycard"
 				},
@@ -469,7 +469,7 @@
 			],
 			options: [
 				{
-					condition: function() {return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb2_keycard));},
+					condition: function() {return game.player.location == "Mizumo HQ, room 2206" && !(game.player.has(game.items.sb4_keycard));},
 					//player is in downstairs office, no keycard
 					text: "Get Keycard from Desk",
 					state: "mizumo_room_2206_keycard",
@@ -477,13 +477,13 @@
 				{
 					condition: function() {return game.player.location == "Mizumo HQ, room 2206";},
 					text: "Go to Elevator",
-					state: "mizumo_elevator_locked"
+					state: "mizumo_elevator_call"
 				},
 				{
 					condition: function() {return game.player.location == "Mizumo HQ, room 2503";},
 					//player is in their own office
 					text: "Ignore the message - go home",
-					state: "mizumo_elevator_locked"
+					state: "mizumo_elevator_call"
 				},
 				{
 					condition: function() {return game.player.location == "Mizumo HQ, room 2503";},
@@ -497,31 +497,31 @@
 		mizumo_room_2206_keycard: {
 			location: 'Mizumo HQ, room 2206',
 			callfore: function() {
-				game.player.get(game.items.sb2_keycard);
+				game.player.get(game.items.sb4_keycard);
 			},
 			text: [
-				"You pick up the keycard. It looks like your own, except their department code is \"AIRT\", which you've never heard of. The name on the keycard is \"Jason Landes\".",
+				"You pick up the keycard. It looks like your own, except their department code is \"AIRT\", which you've never heard of. The name on the keycard is \"Jason Landes\"."
 			],
 			options: [
 				{
 					text: "Put the keycard back and go home",
 					callback: function() {
-						game.player.lose(game.items.sb2_keycard);
+						game.player.lose(game.items.sb4_keycard);
 					},
 					state: "mizumo_leaving"
 				},
 				{
-					text: "Go help the trapped person",
-					state: "mizumo_elevator_locked"
+					text: "Go help Jason",
+					state: "mizumo_elevator_call"
 				}
 			]
 		},
-		mizumo_elevator_locked: {
+		mizumo_elevator_call: {
 			location: 'Mizumo HQ, Service Elevator 07b',
 			text: [
-				"You press the button to call an elevator, and one immediately opens behind you."
-				//todo
-
+				"You press the button to call an elevator. The door directly behind you opens with a small \"ding!\"",
+				"As you step into the elevator, the small security camera in the corner whines quietly, obscured by semi-opaque glass.",
+				"Mizumo HQ uses smart elevators - the usual button panel is replaced by a touchscreen. There is also a keycard access panel installed just above the controls."
 			],
 			options: [
 				{
@@ -539,7 +539,7 @@
 					state: "mizumo_return_to_desk"
 				},
 				{
-					condition: function() {return (game.player.has(game.items.sb2_keycard));},
+					condition: function() {return (game.player.has(game.items.sb4_keycard));},
 					text: "Use Mizumo Keycard",
 					state: "mizumo_elevator_unlocked"
 				}
@@ -548,7 +548,7 @@
 		mizumo_elevator_unlocked: {
 			location: 'Mizumo HQ, Service Elevator 07b',
 			text: [
-				"The lock icon on the button for sub-basement 2 disappears."
+				"The lock icon on the button for Sub-Basement 4 disappears."
 			],
 			options: [
 				{
@@ -556,8 +556,8 @@
 					state: "mizumo_room_2206"
 				},
 				{
-					text: "Go to Sub-Basement 2",
-					state: "mizumo_sb2_arrive"
+					text: "Go to Sub-Basement 4",
+					state: "mizumo_sb4_arrive"
 				},
 				{
 					text: "Go to ground floor and leave",
@@ -595,15 +595,15 @@
 				}
 			]
 		},
-		mizumo_sb2_arrive: {
-			location: "Mizumo HQ, Sub-Basement 2",
+		mizumo_sb4_arrive: {
+			location: "Mizumo HQ, Sub-Basement 4",
 			checkpoint: {
 				callback: function() {
 					game.player.name = "debug";
 				},
 				player_required_inventory: [
 					game.items.smartphone,
-					game.items.sb2_keycard
+					game.items.sb4_keycard
 				],
 				player_optional_inventory: [
 					//none
@@ -616,7 +616,7 @@
 					"mizumo_opsec_called",
 					"mizumo_2206_snooped"
 				],
-				script_state: "mizumo_sb2_arrive"
+				script_state: "mizumo_sb4_arrive"
 			},
 			text: [
 				"You step out of the elevator into a dark hallway. A light, alerted somehow to your presence, flickers on behind a door to your right.",
@@ -626,16 +626,16 @@
 			options: [
 				{
 					text: "Go through the door to the right",
-					state: "mizumo_sb2_rooms"
+					state: "mizumo_sb4_rooms"
 				},
 				{
 					text: "Look around a little more",
-					state: "mizumo_sb2_elevator"
+					state: "mizumo_sb4_elevator"
 				}
 			]
 		},
-		mizumo_sb2_elevator: {
-			location: 'Mizumo HQ, Sub-Basement 2',
+		mizumo_sb4_elevator: {
+			location: 'Mizumo HQ, Sub-Basement 4',
 			text: [
 				"You notice the elvator doors shut behind you with a sudden snap. The lights buzz on and off.",
 				"You hear the elevator begin to rise behind you."
@@ -643,11 +643,11 @@
 			options: [
 				{
 					text: "Call the elevator",
-					state: "mizumo_sb2_call_elevator"
+					state: "mizumo_sb4_call_elevator"
 				},
 				{
 					text: "Walk through the door to your right",
-					state: "mizumo_sb2_arrive"
+					state: "mizumo_sb4_arrive"
 				},
 				{
 					text: "Look around near the elevator",
@@ -655,13 +655,13 @@
 				},
 				{
 					text: "Use your cell phone and call for help",
-					state: "mizumo_sb2_cellphone",
-					condition: function() {return !game.player.has(game.events.use_sb2_cellphone);}
+					state: "mizumo_sb4_cellphone",
+					condition: function() {return !game.player.has(game.events.use_sb4_cellphone);}
 				}
 			]
 		},
-		mizumo_sb2_call_elevator: {
-			location: 'Mizumo HQ, Sub-Basement 2',
+		mizumo_sb4_call_elevator: {
+			location: 'Mizumo HQ, Sub-Basement 4',
 			text: [
 				"You press the call elevator button, but it doesn't respond. Only now do you realize the folly of going to the same place where someone just said they were trapped.",
 				"There must be an emergency exit stairwell somewhere, but you don't know where. You turn on your cell phone flashlight."
@@ -669,7 +669,7 @@
 			options: [
 				{
 					text: "Go to the door on your right",
-					state: "mizumo_sb2_arrive"
+					state: "mizumo_sb4_arrive"
 				},
 				{
 					text: "Look around near the elevator",
@@ -677,13 +677,13 @@
 				},
 				{
 					text: "Use your cell phone and call for help",
-					state: "mizumo_sb2_cellphone",
-					condition: function() {return !game.player.has(game.events.use_sb2_cellphone);}
+					state: "mizumo_sb4_cellphone",
+					condition: function() {return !game.player.has(game.events.use_sb4_cellphone);}
 				}
 			]
 		},
 		electrical_box: {
-			location: 'Mizumo HQ, Sub-Basement 2',
+			location: 'Mizumo HQ, Sub-Basement 4',
 			text: [
 				"There is an older electrical box mounted on the wall to the left of the elevator, buzzing softly.",
 				"You can see a fresh handprint in the thin layer of dust on top."
@@ -696,12 +696,12 @@
 				},
 				{
 					text: "Go to the door on your right",
-					state: "mizumo_sb2_arrive"
+					state: "mizumo_sb4_arrive"
 				}
 			]
 		},
 		electrical_box_interior: {
-			location: 'Mizumo HQ, Sub-Basement 2',
+			location: 'Mizumo HQ, Sub-Basement 4',
 			text: [
 				"You find what seems to be a fresh piece of paper folded atop a small toolbox behind some wires...",
 				{
@@ -725,7 +725,7 @@
 					font: "serif"
 				},
 				{
-					text: "This will prevent the elevators from being called from sb2 and sb1 - you'll need to take the stairs. Make sure everyone is out of the office first.",
+					text: "This will prevent the elevators from being called from sb4 and sb3 - you'll need to take the stairs. Make sure everyone is out of the office first.",
 					color: "brown",
 					font: "serif"
 				},
@@ -734,16 +734,16 @@
 			options: [
 				{
 					text: "Go through the door on your right",
-					state: "mizumo_sb2_rooms"
+					state: "mizumo_sb4_rooms"
 				},
 				{
 					text: "Take the multitool",
-					state: "mizumo_sb2_multitool"
+					state: "mizumo_sb4_multitool"
 				}
 			]
 		},
-		mizumo_sb2_multitool: {
-			location: 'Mizumo HQ, Sub-Basement 2',
+		mizumo_sb4_multitool: {
+			location: 'Mizumo HQ, Sub-Basement 4',
 			text: [
 				"You pick up a small multitool, maybe it will come in handy later?"
 			],
@@ -753,33 +753,33 @@
 			options: [
 				{
 					text: "Go through the door on your right",
-					state: "mizumo_sb2_rooms"
+					state: "mizumo_sb4_rooms"
 				}
 			]
 		},
-		mizumo_sb2_rooms: {
-			location: 'Mizumo HQ, Sub-Basement 2',
+		mizumo_sb4_rooms: {
+			location: 'Mizumo HQ, Sub-Basement 4',
 			text: [
 				"You come to a junction with several doors."
 			],
 			options: [
 				{
 					text: "Return to the elevator",
-					state: "mizumo_sb2_elevator"
+					state: "mizumo_sb4_elevator"
 				},
 				{
-					text: "Enter room S228",
-					state: "mizumo_sb2_lockeddoor"
+					text: "Enter room S428",
+					state: "mizumo_sb4_rm28"
 				},
 				{
-					text: "Enter room S229",
-					state: "mizumo_sb2_rm229"
+					text: "Enter room S429",
+					state: "mizumo_sb4_rm29_pre"
 				},
 				{
-					text: "Enter room S230",
-					state: "mizumo_sb2_rm230"
+					text: "Enter room S430",
+					state: "mizumo_sb4_rm30"
 				}
 			]
 		},
-	}
+	};
 })(game);
