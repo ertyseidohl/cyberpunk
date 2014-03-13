@@ -11,31 +11,27 @@ var game = new Game({
 		]
 	});
 
-var init = function(){
-	document.onkeyup = function(evt){game.keyListener(evt.keyCode);};
+var init = function() {
+	document.onkeyup = function(evt) {game.keyListener(evt.keyCode);};
 	game.restart();
 	requestAnimationFrame(loop);
-}
+};
 
-var loop = function(){
+var loop = function() {
 	game.loop();
 	window.requestAnimationFrame(loop);
-}
+};
 
 //http://stackoverflow.com/a/12286303/374601
-function onReady ( callback ){
+function onReady ( callback ) {
     var addListener = document.addEventListener || document.attachEvent,
-        removeListener =  document.removeEventListener || document.detachEvent
-        eventName = document.addEventListener ? "DOMContentLoaded" : "onreadystatechange"
+        removeListener =  document.removeEventListener || document.detachEvent;
+        eventName = document.addEventListener ? "DOMContentLoaded" : "onreadystatechange";
 
-    addListener.call(document, eventName, function(){
-        removeListener( eventName, arguments.callee, false )
-        callback()
-    }, false )
+    addListener.call(document, eventName, function() {
+        removeListener( eventName, arguments.callee, false );
+        callback();
+    }, false );
 }
 
 onReady(init);
-
-window.addEventListener('resize', function(event){
-  game.flow();
-});
