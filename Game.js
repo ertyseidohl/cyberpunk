@@ -1,51 +1,4 @@
 ;(function(exports) {
-
-	var Player = function() {
-		this.inventory = {};
-		this.name = '';
-		this.location = '';
-		this.events = {};
-		this.states = {};
-	};
-
-	Player.prototype.happen = function(evt) {
-		if(!evt) throw new Error("Event Error: evt is not an object");
-		console.log("HAPPEN " + evt);
-		this.events[evt] = true;
-	};
-
-	Player.prototype.get = function(item) {
-		if(!item) throw new Error("Inventory Error: item is not an object");
-		console.log("GOT " + item);
-		if(this.has(item)) throw new Error ("Inventory Error: Player already has " + item);
-		this.inventory[item] = true;
-		game.updatePlayer();
-	};
-
-	Player.prototype.lose = function(item) {
-		if(!item) throw new Error("Inventory Error: item is not an object");
-		console.log("LOST " + item);
-		if(!this.has(item)) throw new Error ("Inventory Error: Player cannot lose " + item);
-		this.inventory[item] = false;
-		game.updatePlayer();
-	};
-
-	Player.prototype.has = function(item) {
-		return this.inventory[item] === true || this.events[item] === true;
-	};
-
-	Player.prototype.visit = function(state_name) {
-		if (this.states[state_name] == undefined) {
-			this.states[state_name] = 1;
-		} else {
-			this.states[state_name] += 1;
-		}
-	}
-
-	Player.prototype.visited = function(state) {
-		return this.states[state] || 0;
-	}
-
 	var Game = function(_settings) {
 
 		this.restart = function() {
@@ -189,7 +142,7 @@
 		if(!reset) this.reset();
 		this.state = newState;
 		this.stateChange = true;
-		this.player.visited(state);
+		this.player.visit(this.state);
 	};
 
 	Game.prototype.reset = function() {
@@ -236,9 +189,9 @@
 			if(!req && !opt && inv) throw new Error("Checkpoint Error! Inevntory item '" + item + "' not required or optional at " + this.state);
 			if(req && !inv) throw new Error("Checkpoint Error! Inventory item '" + item + "' required but not found at " + this.state);
 		}
-		for(var evt in this.events) {
-			req = checkpoint.player_required_events.indexOf(evt) !== -1;
-			opt = checkpoint.player_optional_events.indexOf(evt) !== -1;
+		for(var evt in this.flags) {
+			req = checkpoint.player_required_flags.indexOf(evt) !== -1;
+			opt = checkpoint.player_optional_flags.indexOf(evt) !== -1;
 			done = this.player.has(evt);
 			if(!req && !opt && done) throw new Error("Checkpoint Error! Event '" + evt + "' not required or optional at " + this.state);
 			if(req && !done) throw new Error("Checkpoint Error! Event '" + evt + "' required but not found at " + this.state);
@@ -256,11 +209,11 @@
 		for (item in checkpoint.player_required_inventory) {
 			this.player.get(checkpoint.player_required_inventory[item]);
 		}
-		for (evt in checkpoint.player_optional_events) {
-			this.player.happen(checkpoint.player_optional_events[evt]);
+		for (evt in checkpoint.player_optional_flags) {
+			this.player.happen(checkpoint.player_optional_flags[evt]);
 		}
-		for (evt in checkpoint.player_required_events) {
-			this.player.happen(checkpoint.player_required_events[evt]);
+		for (evt in checkpoint.player_required_flags) {
+			this.player.happen(checkpoint.player_required_flags[evt]);
 		}
 		this.lastState = "";
 		this.setState(checkpoint.script_state);

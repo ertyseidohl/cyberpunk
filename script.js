@@ -280,7 +280,7 @@
 			],
 			options: [
 				{
-					condition: function() {return !(game.player.has(game.events.mizumo_2206_snooped));},
+					condition: function() {return !(game.player.visited('mizumo_room_2206_examine'));},
 					text: "Look Around",
 					state: "mizumo_room_2206_examine"
 				},
@@ -290,7 +290,7 @@
 					state: "mizumo_room_2206_keycard"
 				},
 				{
-					condition: function() {return !(game.player.has(game.events.mizumo_2206_snooped));},
+					condition: function() {return !(game.player.visited('mizumo_room_2206_examine'));},
 					text: "Snoop around in the office",
 					state: "mizumo_room_2206_examine"
 				},
@@ -338,10 +338,10 @@
 					color: "red"
 				},
 				function() {
-					if (!(game.player.visited('mizumo_call_opsec')) return "Oh, right. OpSec goes home at 6pm like everyone else.";
+					if (!(game.player.visited('mizumo_call_opsec'))) return "Oh, right. OpSec goes home at 6pm like everyone else.";
 				},
 				function() {
-					if (!(game.player.visited('mizumo_call_opsec')) return "You'd think a multi-million dollar corporation would have 24-hour security. But no, it's this automated system.";
+					if (!(game.player.visited('mizumo_call_opsec'))) return "You'd think a multi-million dollar corporation would have 24-hour security. But no, it's this automated system.";
 				}
 			],
 			options: [
@@ -403,9 +403,6 @@
 		},
 		mizumo_call_opsec_emergencies: {
 			location: undefined,
-			callfore: function() {
-				game.player.happen("mizumo_opsec_called");
-			},
 			text: [
 				{
 					text: "Please hold.",
