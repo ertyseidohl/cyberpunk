@@ -1,0 +1,143 @@
+sb4 jnct
+
+You come to a corridor with three closed doors. The only light here is a single, buzzing flourescent light which reflects off the tile underfoot. The air here feels cold, and you hear the humming of electronic equipment through the walls.
+
+if (started_banging):
+    The banging noise is louder now! You hear it, still somewhat muffled, behind door sb2.
+
+if(not visited jnct)
+    You hear the small whine of the security camera posted above the second door as it focuses on you.
+
+
+set(visited jnct)
+
+::
+
+if(not sb4 rm 1 useless):
+    if(jason keycard):
+        sb4 rm 1 dark
+    else:
+        sb4 rm 1 lock
+
+sb4 rm 2
+
+if(secret keycard):
+    sb4 rm 3
+
+---
+
+sb4 rm 1 dark
+
+You scan the keycard and enter the room. It is dark in here.
+
+::
+
+turn on the light
+    sb4 rm 1 light
+
+use flashlight (inventory option?)
+    sb4 rm 1 light
+
+back to sb4 jnct
+    sb4 jnct
+
+---
+
+sb4 rm 1 light
+
+if(flashlight)
+	You shine your flashlight around the room.
+else if(not turned on sb4 rm 1 light)
+	You flip the lightswitch on. A small security camera in the corner whines as it adjusts to get a clearer picture of you.
+
+set (turned on sb4 rm 1 light)
+
+It's some sort of office: papers and cables spill over the desks that line the outer walls of the room.
+
+If not opened sb2:
+    You hear a muffled banging sound, as though someone is pounding on a door back at the junction.
+    set(started_banging)
+
+::
+
+Go back to the corridor
+	sb jnct
+
+Examine the papers
+	sb4 rm 1 examine
+
+---
+
+sb4_rm_1_lock
+
+The door is locked. There's a keycard reader next to it, but you don't have access here.
+
+(set sb4 rm 1 useless)
+
+::
+
+sb rm 2
+
+sb rm 3
+
+---
+
+sb4 rm 1 examine
+
+The papers are mostly technical documents and programming manuals.
+
+if(flashlight)
+	With just the light from your flashlight, it's hard to see much more.
+else
+	Many of them have to do with systems integration and user experience.
+
+if(banging_started)
+	You continue to hear muffled pounding from another room.
+
+::
+
+Go back to the corridor
+	sb jnct
+
+if(not flashlight)
+	turn on the lights
+	sb_rm_1_light
+
+---
+
+sb4 rm 3 useless
+
+You attempt to open the door, but even Jason Landes' keycard won't grant you access.
+
+if(banging_started)
+	It sounds like the pounding noises are coming from the room sb4_2
+
+::
+
+if(not sb4 rm 1 useless)
+	sb rm 1
+
+sb rm 2
+
+examine door further
+	sb4 rm 3 examine door
+
+return to elevators
+	elevators
+
+---
+
+sb4 rm 3 examine door
+
+This door is heavier than the others, a black steel frame surrounding a red-painted door. You see a larger, more complicated keycard reader. It looks like you'll also need a fingerprint to grant access.
+
+A small placard centered on the door reads "AIRT Mainframe - Priveleged access only".
+
+::
+
+if(not sb4 rm 1 useless)
+	sb rm 1
+
+sb rm 2
+
+return to elevators
