@@ -1,38 +1,11 @@
 ;(function(exports) {
 
-	var __ = function(strArr) {
-		return strArr.map(function(str) {
-			var obj = {
-				text: '',
-				contain: 'p',
-				font: 'courier new',
-				stringIndex: 0,
-				appear: 'letter'
-			};
-			if(typeof(str) == "function") {
-				str = str.call(this);
-			}
-			if(typeof(str) == "object") {
-				obj.text = str.text || obj.text;
-				obj.color = str.color || obj.color;
-				obj.appear = str.appear || obj.appear;
-				obj.contain = str.contain || obj.contain;
-				obj.font = str.font || obj.font;
-			} else if(typeof(str) == "string") {
-				obj.text = str;
-			}
-			obj.text = obj.text.replace('__NAME__', game.player.name).replace('__NAME_UC__', game.player.name.toUpperCase());
-			return obj;
-		}).filter(function(obj) {
-			return obj.text.length > 0;
-		});
-	};
-
 	var Player = function() {
 		this.inventory = {};
 		this.name = '';
 		this.location = '';
 		this.events = {};
+		this.states = {};
 	};
 
 	Player.prototype.happen = function(evt) {
@@ -60,6 +33,18 @@
 	Player.prototype.has = function(item) {
 		return this.inventory[item] === true || this.events[item] === true;
 	};
+
+	Player.prototype.visit = function(state_name) {
+		if (this.states[state_name] == undefined) {
+			this.states[state_name] = 1;
+		} else {
+			this.states[state_name] += 1;
+		}
+	}
+
+	Player.prototype.visited = function(state) {
+		return this.states[state] || 0;
+	}
 
 	var Game = function(_settings) {
 
@@ -204,6 +189,7 @@
 		if(!reset) this.reset();
 		this.state = newState;
 		this.stateChange = true;
+		this.player.visited(state);
 	};
 
 	Game.prototype.reset = function() {
@@ -296,5 +282,4 @@
 	};
 
 	exports.Game = Game;
-	exports.__ = __;
 })(this);

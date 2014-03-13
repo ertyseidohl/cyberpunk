@@ -236,19 +236,16 @@
 		},
 		mizumo_examine_alert: {
 			location: 'Mizumo HQ, room 2503',
-			callfore: function() {
-				game.player.happen("janus_message_read");
-			},
 			color: "blue",
 			text: [
 				"To: __NAME_UC__",
-				"From: JASON LANDES",
+				"From: JORDAN LANDES",
 				"Subject: HELP PLEASE",
-				"I'M TRAPPED IN ROOM S429 IN Sub-Basement 4. IS ANYONE STILL AROUND? I'VE TRIED CALLING SECURITY BUT THEY AREN'T ANSWERING.",
+				"I'M TRAPPED IN ROOM S429 IN SUB-BASEMENT 4. IS ANYONE STILL AROUND? I'VE TRIED CALLING SECURITY BUT THEY AREN'T ANSWERING.",
 				"I KNOW THIS IS TOTALLY AGAINST POLICY, BUT THERE'S A SPARE KEYCARD IN MY DESK (ROOM 2206) IN THE THIRD DRAWER DOWN THAT WILL GET YOU INTO THE BASEMENT.",
 				"I'VE BEEN DOWN HERE A LONG TIME ALREADY AND I REALLY DON'T WANT TO BE HERE UNTIL MONDAY!",
 				"PLEASE HELP ME!",
-				"JASON"
+				"JORDAN"
 			],
 			options: [
 				{
@@ -277,9 +274,6 @@
 		},
 		mizumo_room_2206: {
 			location: 'Mizumo HQ, room 2206',
-			callfore: function() {
-				game.player.happen("visited_room_2206");
-			},
 			text: [
 				"Room 2206 is an office on the 22nd floor - three floors down from you. It's a smaller office than yours, for what that's worth.",
 				"You have an uneasy feeling, but it's probably becuase most of the lights are off here and there's nobody around."
@@ -313,7 +307,7 @@
 			},
 			text: [
 				"You hear the small whine of something mechanical behind you, and you whip around. You see a security camera zooming in on you. Idiots in Opsec have time to watch you on the camera but not save people in the basement.",
-				function() {if(!game.player.has(game.events.mizumo_opsec_called)) return "Come to think of it, you could probably just call Opsec and have them rescue James or whoever they were.";},
+				function() {if(!game.player.visited('mizumo_call_opsec')) return "Come to think of it, you could probably just call Opsec and have them rescue James or whoever they were.";},
 				"You notice that this room seems... almost too empty for someone to be working in it. There's barely anything on the desk. Either way, it looks like the keycard should be where they said."
 			],
 			options: [
@@ -323,7 +317,7 @@
 					state: "mizumo_room_2206_keycard"
 				},
 				{
-					condition: function() {return !(game.player.has(game.events.mizumo_opsec_called));},
+					condition: function() {return !(game.player.visited('mizumo_call_opsec'));},
 					text: "Call the Opsec office",
 					state: "mizumo_call_opsec"
 				},
@@ -344,12 +338,10 @@
 					color: "red"
 				},
 				function() {
-					if (!(game.player.has(game.events.mizumo_opsec_called)))
-					return "Oh, right. OpSec goes home at 6pm like everyone else.";
+					if (!(game.player.visited('mizumo_call_opsec')) return "Oh, right. OpSec goes home at 6pm like everyone else.";
 				},
 				function() {
-					if (!(game.player.has(game.events.mizumo_opsec_called)))
-					return "You'd think a multi-million dollar corporation would have 24-hour security. But no, it's this automated system.";
+					if (!(game.player.visited('mizumo_call_opsec')) return "You'd think a multi-million dollar corporation would have 24-hour security. But no, it's this automated system.";
 				}
 			],
 			options: [
@@ -369,9 +361,6 @@
 		},
 		mizumo_call_opsec_non_emergencies: {
 			location: undefined,
-			callfore: function() {
-				game.player.happen("mizumo_opsec_called");
-			},
 			text: [
 				{
 					text: "\"Thank you for your call. The Mizumo Operations Security office is closed for the weekend. Please call back during working hours.\"",
@@ -500,7 +489,7 @@
 				game.player.get(game.items.sb4_keycard);
 			},
 			text: [
-				"You pick up the keycard. It looks like your own, except their department code is \"AIRT\", which you've never heard of. The name on the keycard is \"Jason Landes\"."
+				"You pick up the keycard. It looks like your own, except their department code is \"AIRT\", which you've never heard of. The name on the keycard is \"Jordan Landes\"."
 			],
 			options: [
 				{
@@ -511,7 +500,7 @@
 					state: "mizumo_leaving"
 				},
 				{
-					text: "Go help Jason",
+					text: "Go help Jordan",
 					state: "mizumo_elevator_call"
 				}
 			]
@@ -529,12 +518,12 @@
 					state: "mizumo_leaving"
 				},
 				{
-					condition: function() {return game.player.has(game.events.visited_room_2206);},
+					condition: function() {return game.player.visited('mizumo_room_2206');},
 					text: "Return to Room 2206",
 					state: "mizumo_room_2206"
 				},
 				{
-					condition: function() {return !(game.player.has(game.events.visited_room_2206));},
+					condition: function() {return game.player.visited('mizumo_room_2206');},
 					text: "Return to your office",
 					state: "mizumo_return_to_desk"
 				},
@@ -596,7 +585,7 @@
 			]
 		},
 		mizumo_sb4_arrive: {
-			location: "Mizumo HQ, Sub-Basement 4",
+			location: "Mizumo HQ, Sub-Basement 4, Elevator Room",
 			checkpoint: {
 				callback: function() {
 					game.player.name = "debug";
@@ -607,14 +596,6 @@
 				],
 				player_optional_inventory: [
 					//none
-				],
-				player_required_events: [
-					"janus_message_read",
-					"visited_room_2206"
-				],
-				player_optional_events: [
-					"mizumo_opsec_called",
-					"mizumo_2206_snooped"
 				],
 				script_state: "mizumo_sb4_arrive"
 			},
@@ -635,7 +616,7 @@
 			]
 		},
 		mizumo_sb4_elevator: {
-			location: 'Mizumo HQ, Sub-Basement 4',
+			location: 'Mizumo HQ, Sub-Basement 4, Elevator Room',
 			text: [
 				"You notice the elvator doors shut behind you with a sudden snap. The lights buzz on and off.",
 				"You hear the elevator begin to rise behind you."
@@ -653,15 +634,10 @@
 					text: "Look around near the elevator",
 					state: "electrical_box"
 				},
-				{
-					text: "Use your cell phone and call for help",
-					state: "mizumo_sb4_cellphone",
-					condition: function() {return !game.player.has(game.events.use_sb4_cellphone);}
-				}
 			]
 		},
 		mizumo_sb4_call_elevator: {
-			location: 'Mizumo HQ, Sub-Basement 4',
+			location: 'Mizumo HQ, Sub-Basement 4, Elevator Room',
 			text: [
 				"You press the call elevator button, but it doesn't respond. Only now do you realize the folly of going to the same place where someone just said they were trapped.",
 				"There must be an emergency exit stairwell somewhere, but you don't know where. You turn on your cell phone flashlight."
@@ -675,15 +651,10 @@
 					text: "Look around near the elevator",
 					state: "electrical_box"
 				},
-				{
-					text: "Use your cell phone and call for help",
-					state: "mizumo_sb4_cellphone",
-					condition: function() {return !game.player.has(game.events.use_sb4_cellphone);}
-				}
 			]
 		},
 		electrical_box: {
-			location: 'Mizumo HQ, Sub-Basement 4',
+			location: 'Mizumo HQ, Sub-Basement 4, Elevator Room',
 			text: [
 				"There is an older electrical box mounted on the wall to the left of the elevator, buzzing softly.",
 				"You can see a fresh handprint in the thin layer of dust on top."
@@ -701,7 +672,7 @@
 			]
 		},
 		electrical_box_interior: {
-			location: 'Mizumo HQ, Sub-Basement 4',
+			location: 'Mizumo HQ, Sub-Basement 4, Elevator Room',
 			text: [
 				"You find what seems to be a fresh piece of paper folded atop a small toolbox behind some wires...",
 				{
@@ -743,7 +714,7 @@
 			]
 		},
 		mizumo_sb4_multitool: {
-			location: 'Mizumo HQ, Sub-Basement 4',
+			location: 'Mizumo HQ, Sub-Basement 4, Elevator Room',
 			text: [
 				"You pick up a small multitool, maybe it will come in handy later?"
 			],
@@ -758,9 +729,17 @@
 			]
 		},
 		mizumo_sb4_rooms: {
-			location: 'Mizumo HQ, Sub-Basement 4',
+			location: 'Mizumo HQ, Sub-Basement 4, Corridor SB4200',
 			text: [
-				"You come to a junction with several doors."
+				"You come to a junction with three closed doors. The only light here is a single, buzzing flourescent tube, which reflects off the tile underfoot. The air here feels colder, and you hear the humming of electronic equipment through the walls.",
+				{
+					condition: function(){return game.flags('banging_sounds');},
+					text: "The banging noise is louder now! You hear it, still somewhat muffled, behind the door to room S429."
+				},
+				{
+					condition: function(){return !game.player.visited('mizumo_sb4_rooms');},
+					text: "You hear the small whine of a security camera. There is one above the door to S429, and you catch the glint of the lens as it brings you into focus."
+				}
 			],
 			options: [
 				{

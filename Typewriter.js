@@ -3,8 +3,36 @@ var Typewriter = function() {
 	this.queue = [];
 };
 
+var coerceFormat = function(strArr) {
+	return strArr.map(function(str) {
+		var obj = {
+			text: '',
+			contain: 'p',
+			font: 'courier new',
+			stringIndex: 0,
+			appear: 'letter'
+		};
+		if(typeof(str) == "function") {
+			str = str.call(this);
+		}
+		if(typeof(str) == "object") {
+			obj.text = str.text || obj.text;
+			obj.color = str.color || obj.color;
+			obj.appear = str.appear || obj.appear;
+			obj.contain = str.contain || obj.contain;
+			obj.font = str.font || obj.font;
+		} else if(typeof(str) == "string") {
+			obj.text = str;
+		}
+		obj.text = obj.text.replace('__NAME__', game.player.name).replace('__NAME_UC__', game.player.name.toUpperCase());
+		return obj;
+	}).filter(function(obj) {
+		return obj.text.length > 0;
+	});
+};
+
 Typewriter.prototype.push = function(element, stringObjects, delay, callback) {
-	stringObjects = __(stringObjects);
+	stringObjects = coerceFormat(stringObjects);
 	var that = this;
 	this.queue.push({
 		"element": element,
