@@ -14,7 +14,7 @@ set(visited jnct)
 ::
 
 if(not sb4 rm 1 useless):
-    if(jason keycard):
+    if(jordan keycard):
         sb4 rm 1 dark
     else:
         sb4 rm 1 lock
@@ -84,12 +84,14 @@ sb rm 3
 
 sb4 rm 1 examine
 
-The papers are mostly technical documents and programming manuals.
+The papers are mostly technical documents and programming manuals. A small placard reads "Jordan Landes, AIRT Technical Lead". There is a picture of a smiling family - a man, a woman, and a child.
+
+(set - recognize jordan)
 
 if(flashlight)
 	With just the light from your flashlight, it's hard to see much more.
 else
-	Many of them have to do with systems integration and user experience.
+	Many of them have to do with systems integration and user experience. You see a variety of instruction manuals for mechanical systems: door mechanisms, air conditioners, fire supression systems, etc.
 
 if(banging_started)
 	You continue to hear muffled pounding from another room.
@@ -107,7 +109,7 @@ if(not flashlight)
 
 sb4 rm 3 useless
 
-You attempt to open the door, but even Jason Landes' keycard won't grant you access.
+You attempt to open the door, but even jordan Landes' keycard won't grant you access.
 
 if(banging_started)
 	It sounds like the pounding noises are coming from the room sb4_2
@@ -141,3 +143,90 @@ if(not sb4 rm 1 useless)
 sb rm 2
 
 return to elevators
+
+###
+
+the player examines rooms 1 and 3, and finds nothing of interest. In room 1, they can begin to hear the pounding sounds from what they assume to be Jordan Landes, trapped in the data center - but they would be wrong. It's actually a trick being played by JANUS to get the player into a good position.
+
+The player eventually  (or quickly) opens the door to room 2 - and finds themselves in an airlock . The pounding noise is coming from the next room in - a door labeled "WARNING - AUTHORIZED PERSONEL ONLY." The player begins to feel cold.
+
+The second door opens with Landes' keycard, and the player sees nothing but an endless array of lights, reminiscent of a starfield. The pounding stops as the door opens, but nobody responds to shouts.
+
+The player feels their feet become cold, as though someone had doused them in ice. The air in here smells funny as well, and the loud sounds of air conditioners and computer fans can be heard whirring in the darkness.
+
+The player enters the room, and the lights above them begin to turn on in rows. The floor scintillates and shimmers, as the (as yet unknown to them) halon gas drains into the floor tiles.
+
+They see an arm sticking out beyond one of the rows of computers, about halfway down the aisle, wearing a light blue shirt and some sort of square watch.
+
+They see
+
+The player can turn back now - if they do, they wait until morning and get ending 1.
+
+Otherwise, if the player enters the room, the door shuts behind them violently and the lights begin to turn off, starting from the opposite end of the facility. (Make this realtime? Playtest!)
+
+The player here has four choices
+
+1. investigate the gas
+2. investigate the computers
+3. investigate the lights
+4. investigate the body
+
+The player has a limit on the amount of time they can spend investigating before the whole area goes dark and they are forced to use their flashlight: 30 sets of lights remain, turning off at a rate of one every 2 seconds.
+
+The player should be reminded here that ~ makes all of the text appear immediately. Or perhaps they should be able to choose between immediate text and long-term text.
+
+GAS:
+
+The player decides to investigate the gas. They see a sign on the wall with instructions on what to do in the event of a gas release. The gas is HALON.
+
+COMPUTERS:
+
+Twelve columns down and twelve rows deep, this is the largest computing facility that the player has ever seen. Every row contains hundreds of servers, all whirring away, processing something. A computer terminal is open in the middle of one of the columns, white text on a black screen.
+
+The player can choose to investigate this terminal. If they do, they see a readout of technical specs, followed by "logout". The terminal prompts for a password.
+
+If the player puts in their username and password from the beginning of the game, they can access a light version of the OS, with files and folders that relate the specs of JANUS, although the player doesn't have permission to do much more.
+
+If the player has created any stack traces, those show up here. They provide the clue that the computer responds only to JASON, and contains a reference to command "timebomb()"
+
+If the player burns enough time here, they are left in total darkness, with only the light of their cell phone to guide them.
+
+LIGHTS:
+
+The lightswitches on the wall have been removed, with a note taped to them that reads "lights on JANUS - say 'lights on'"
+
+If the player says "lights on", a friendly male voice tells them "Permission denied. Error: Unidentified user signature. Stack trace available at the nearest console." (http://text-to-speech.imtranslator.net/)
+
+If the player says "lights off", they get the same response.
+
+If the player says anything else, they get "Error: Unknown command. Error: Unidentified user signature. Stack trace available at the nearest console."
+
+BODY:
+
+If the player has identified Jordan Landes, then they recognize her immediately. Otherwise, they have a suspicion that this is Jordan, but can't confirm it.
+
+Jordan is a woman in her mid-50s, with a sharp nose, dark skin, and short hair. She wears a smartwatch (which the player can take), and carries a smartphone similar to the players', although it is locked with a pin, which is randomly generated each playthough.
+
+The player here can attempt to unlock the phone, but after 3 tries it locks for five minutes. There is nowhere that the player can get the smart
+
+The player can also switch the batteries on the phones to give theirs more juice (Jordan's is at 80%).
+
+Jordan died with her eyes open and is sprawled as though she tripped and fell. If the player invesigates closely, she is barely warmer than the room temperature. It will be left ambigious to whether she actually sent the email that triggered the player to come down to the sub-basement.
+
+Jordan is wearing an older, more used version of the badge the user carries.
+
+In her pocket is a book full of notes on various systems. The player can take this as well.
+
+If the lights shut off, then the player is left in the dark, alone, in the middle of the giant array of computers. Things should start to be scary.
+
+The player should note, (for if the player IRL hasn't noted already) that Jordan died too long ago and too far away to be the one banging on the door.
+
+ANYWAY:
+
+An emergency exit sign flickers to life at the end of one of the rows. Beyond the thousands of tiny blue and yellow lights flickering down the banks and banks of computers, this is the only light that the player can see.
+
+The player can continue to search the four options from before (minus any that they have already tried). If they search the body, they notice that it is warm, cannot see who it is, and notice the knocking distance anomoly right at the beginning.
+
+The player can also move toward the exit light. If they do, they find a door that clicks to open as they approach it.
+
+END OF CHAPTER 1.
