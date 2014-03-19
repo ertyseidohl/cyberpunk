@@ -1,0 +1,16 @@
+/* Chrome */
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+	background: black;
+    border: 1px solid green;
+}
+::-webkit-scrollbar-thumb {
+    background: black;
+    border: 1px solid green;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: black;
+    border: 1px solid green;
+}

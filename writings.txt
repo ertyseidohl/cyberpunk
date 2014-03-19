@@ -5,7 +5,7 @@ You come to a corridor with three closed doors. The only light here is a single,
 if (started_banging):
     The banging noise is louder now! You hear it, still somewhat muffled, behind door sb2.
 
-if(not visited jnct)
+if (not visited jnct)
     You hear the small whine of the security camera posted above the second door as it focuses on you.
 
 
@@ -13,15 +13,15 @@ set(visited jnct)
 
 ::
 
-if(not sb4 rm 1 useless):
-    if(jordan keycard):
+if (not sb4 rm 1 useless):
+    if (jordan keycard):
         sb4 rm 1 dark
     else:
         sb4 rm 1 lock
 
 sb4 rm 2
 
-if(secret keycard):
+if (secret keycard):
     sb4 rm 3
 
 ---
@@ -45,9 +45,9 @@ back to sb4 jnct
 
 sb4 rm 1 light
 
-if(flashlight)
+if (flashlight)
 	You shine your flashlight around the room.
-else if(not turned on sb4 rm 1 light)
+else if (not turned on sb4 rm 1 light)
 	You flip the lightswitch on. A small security camera in the corner whines as it adjusts to get a clearer picture of you.
 
 set (turned on sb4 rm 1 light)
@@ -88,12 +88,12 @@ The papers are mostly technical documents and programming manuals. A small placa
 
 (set - recognize jordan)
 
-if(flashlight)
+if (flashlight)
 	With just the light from your flashlight, it's hard to see much more.
 else
 	Many of them have to do with systems integration and user experience. You see a variety of instruction manuals for mechanical systems: door mechanisms, air conditioners, fire supression systems, etc.
 
-if(banging_started)
+if (banging_started)
 	You continue to hear muffled pounding from another room.
 
 ::
@@ -101,7 +101,7 @@ if(banging_started)
 Go back to the corridor
 	sb jnct
 
-if(not flashlight)
+if (not flashlight)
 	turn on the lights
 	sb_rm_1_light
 
@@ -111,12 +111,12 @@ sb4 rm 3 useless
 
 You attempt to open the door, but even jordan Landes' keycard won't grant you access.
 
-if(banging_started)
+if (banging_started)
 	It sounds like the pounding noises are coming from the room sb4_2
 
 ::
 
-if(not sb4 rm 1 useless)
+if (not sb4 rm 1 useless)
 	sb rm 1
 
 sb rm 2
@@ -137,7 +137,7 @@ A small placard centered on the door reads "AIRT Mainframe - Priveleged access o
 
 ::
 
-if(not sb4 rm 1 useless)
+if (not sb4 rm 1 useless)
 	sb rm 1
 
 sb rm 2

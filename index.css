@@ -35,7 +35,7 @@ div{
 #console{
 	position: relative;
 	height: 90%;
-	top: 20px;	
+	top: 20px;
 	width: 100%;
 	margin: 0px auto;
 	max-width: 1000px;
@@ -50,6 +50,7 @@ div{
 	right: 0;
 	outline: 1px solid green;
 	padding: 2.5%;
+	overflow-y: auto;
 }
 #input{
 	outline: 1px solid green;
@@ -61,15 +62,17 @@ div{
 	right: 0;
 }
 	.option{
-		width: 18%;
+		width: 20%;
+		padding: 0 2.5%;
+		height: 100%;
 		float: left;
-		margin: 0 1.5%;
-		height: 85%;
-		padding: 1.5% 1.5%;
 		color: white;
 		font-size: 18px;
+		position: relative;
+		cursor: pointer;
 	}
 	.option-num{
+		padding-top: 7px;
 		display: block;
 		color: green;
 	}

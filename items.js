@@ -1,7 +1,13 @@
 ;(function(exports) {
 	exports.items = {
-		"smartphone": "Smartphone",
-		"sb2_keycard": "Mizumo Keycard",
+		"smartphone": {
+			name: "Smartphone",
+			battery: 56,
+			toString: function(){
+				return this.name + " - " + this.battery + "% battery";
+			}
+		},
+		"sb4_keycard": "Mizumo Keycard",
 		"multitool": "Multitool"
 	};
 })(game);

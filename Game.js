@@ -43,12 +43,18 @@
 		s += '<p><span class="heavy">Name:</span><br  />' + this.player.name + '</p>';
 		s += '<p><span class="heavy">Location:</span><br />' + this.player.location + '</p>';
 		s += '<p><span class="heavy">Inventory:</span><br />';
-		if(this.player.inventory.length === 0) {
+		if (this.player.inventory.length === 0) {
 			s += 'No Items';
 		} else {
 			s += '<ul>';
-			for(var item in this.player.inventory) {
-				s += '<li>' + item + '</li>';
+			for (var item in this.player.inventory) {
+				if (typeof(item) == "string") {
+					s += '<li>' + item + '</li>';
+				} else if (typeof(item) == "object") {
+					s += '<li>' + item.toString() + '</li>';
+				} else{
+					throw new Error("Inventory Error: item not object nor string");
+				}
 			}
 			s += '</ul>';
 		}
@@ -57,15 +63,20 @@
 	};
 
 	Game.prototype.loop = function() {
-		if(this.lastState != this.state) {
+		this.player.flags.forEach(function(flag) {
+			if (flag.loop !== undefined) {
+				flag.loop();
+			}
+		});
+		if (this.lastState != this.state) {
 
 			console.log(this.lastState, " -> ", this.state);
 
-			if(this.script[this.lastState] && this.script[this.lastState].callback) {
+			if (this.script[this.lastState] && this.script[this.lastState].callback) {
 				this.script[this.lastState].callback.call(this);
 			}
 
-			if(!this.script[this.state]) {
+			if (!this.script[this.state]) {
 				this.outEl.innerHTML = "Not Yet Written: " + this.state;
 				this.setOptions({
 					1: {
@@ -82,25 +93,25 @@
 				return;
 			}
 
-			if(this.script[this.state].checkpoint) {
+			if (this.script[this.state].checkpoint) {
 				this.checkCheckpoint(this.script[this.state].checkpoint);
 			}
 
-			if(this.script[this.state].callfore) {
+			if (this.script[this.state].callfore) {
 				this.script[this.state].callfore.call(this);
 			}
 
-			if(this.script[this.state].color) {
+			if (this.script[this.state].color) {
 				this.outEl.style.color = this.script[this.state].color;
 			} else{
 				this.outEl.style.color = "green";
 			}
 
-			if(this.script[this.state].location) {
+			if (this.script[this.state].location) {
 				this.player.location = this.script[this.state].location;
 				this.updatePlayer();
 			}
-			if(this.script[this.state].options) {
+			if (this.script[this.state].options) {
 				this.typewriter.push(
 					this.outEl,
 					this.script[this.state].text,
@@ -109,7 +120,7 @@
 						var i = 1;
 						var options = {};
 						this.script[this.state].options.forEach(function(option) {
-							if((option.condition && option.condition()) || !option.condition) {
+							if ((option.condition && option.condition()) || !option.condition) {
 								options[i] = option;
 								var _callback = option.callback || function(){};
 								options[i].callback = function() {
@@ -129,7 +140,7 @@
 		}
 
 
-		if(this.script[this.state] && this.script[this.state].loop) {
+		if (this.script[this.state] && this.script[this.state].loop) {
 			this.script[this.state].loop.call(this);
 		}
 
@@ -139,7 +150,7 @@
 	};
 
 	Game.prototype.setState = function(newState, reset) {
-		if(!reset) this.reset();
+		if (!reset) this.reset();
 		this.state = newState;
 		this.stateChange = true;
 		this.player.visit(this.state);
@@ -154,7 +165,7 @@
 	Game.prototype.setOptions = function(options) {
 		options = options || {};
 		for(var i = 1; i <= 4; i++) {
-			if(!options[i]) {
+			if (!options[i]) {
 				this.opt[i].enabled = false;
 				this.opt[i].element.style.visibility = "hidden";
 			} else{
@@ -168,9 +179,9 @@
 
 	Game.prototype.keyListener = function(keyCode) {
 		var key = keyCode - 48; //"1"
-		if(this.opt[key] && this.opt[key].enabled && this.opt[key].callback) {
+		if (this.opt[key] && this.opt[key].enabled && this.opt[key].callback) {
 			this.opt[key].callback.call(this, this.opt[key].element);
-		} else if(key == 144) { // "~"
+		} else if (key == 144) { // "~"
 			this.typewriter.finish();
 		}
 	};
@@ -186,15 +197,15 @@
 			req = checkpoint.player_required_inventory.indexOf(item) !== -1;
 			opt = checkpoint.player_optional_inventory.indexOf(item) !== -1;
 			inv = this.player.has(item);
-			if(!req && !opt && inv) throw new Error("Checkpoint Error! Inevntory item '" + item + "' not required or optional at " + this.state);
-			if(req && !inv) throw new Error("Checkpoint Error! Inventory item '" + item + "' required but not found at " + this.state);
+			if (!req && !opt && inv) throw new Error("Checkpoint Error! Inevntory item '" + item + "' not required or optional at " + this.state);
+			if (req && !inv) throw new Error("Checkpoint Error! Inventory item '" + item + "' required but not found at " + this.state);
 		}
 		for(var evt in this.flags) {
 			req = checkpoint.player_required_flags.indexOf(evt) !== -1;
 			opt = checkpoint.player_optional_flags.indexOf(evt) !== -1;
 			done = this.player.has(evt);
-			if(!req && !opt && done) throw new Error("Checkpoint Error! Event '" + evt + "' not required or optional at " + this.state);
-			if(req && !done) throw new Error("Checkpoint Error! Event '" + evt + "' required but not found at " + this.state);
+			if (!req && !opt && done) throw new Error("Checkpoint Error! Event '" + evt + "' not required or optional at " + this.state);
+			if (req && !done) throw new Error("Checkpoint Error! Event '" + evt + "' required but not found at " + this.state);
 		}
 	};
 
@@ -223,7 +234,7 @@
 	var _get = function(url, callback) {
 		var oReq = new XMLHttpRequest();
 		oReq.onload = function(a) {
-			if(callback) {
+			if (callback) {
 				callback.call(this, a.target.response);
 			} else {
 				console.log("Error: No callback available!");

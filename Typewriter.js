@@ -12,16 +12,16 @@ var coerceFormat = function(strArr) {
 			stringIndex: 0,
 			appear: 'letter'
 		};
-		if(typeof(str) == "function") {
+		if (typeof(str) == "function") {
 			str = str.call(this);
 		}
-		if(typeof(str) == "object") {
+		if (typeof(str) == "object") {
 			obj.text = str.text || obj.text;
 			obj.color = str.color || obj.color;
 			obj.appear = str.appear || obj.appear;
 			obj.contain = str.contain || obj.contain;
 			obj.font = str.font || obj.font;
-		} else if(typeof(str) == "string") {
+		} else if (typeof(str) == "string") {
 			obj.text = str;
 		}
 		obj.text = obj.text.replace('__NAME__', game.player.name).replace('__NAME_UC__', game.player.name.toUpperCase());
@@ -58,28 +58,28 @@ Typewriter.prototype.finish = function() {
 };
 
 Typewriter.prototype.typeFunction = function() {
-	if(this.done) return;
+	if (this.done) return;
 	this.delayPassed += 1;
 	while(this.delayPassed == this.delay || (this.finish && !this.done)) {
 		var obj = this.stringObjects[this.objectsIndex];
 		this.delayPassed = 0;
-		if(obj.stringIndex === 0) {
+		if (obj.stringIndex === 0) {
 			this.el = document.createElement(obj.contain);
-			if(obj.color) this.el.style.color = obj.color;
-			if(obj.font) this.el.style.fontFamily = obj.font;
+			if (obj.color) this.el.style.color = obj.color;
+			if (obj.font) this.el.style.fontFamily = obj.font;
 			this.element.appendChild(this.el);
 		}
-		if(obj.stringIndex == obj.text.length) {
+		if (obj.stringIndex == obj.text.length) {
 			this.objectsIndex ++;
 			obj.stringIndex = 0;
-			if(this.objectsIndex == this.stringObjects.length) this.done = true;
+			if (this.objectsIndex == this.stringObjects.length) this.done = true;
 		} else{
-			if(obj.appear == "letter") {
+			if (obj.appear == "letter") {
 				this.el.innerHTML += obj.text[obj.stringIndex];
 				obj.stringIndex ++;
-			} else if(obj.appear == "word") {
+			} else if (obj.appear == "word") {
 				console.log("todo");
-			} else if(obj.appear == "all") {
+			} else if (obj.appear == "all") {
 				this.el.innerHTML += obj.text;
 				obj.stringIndex += obj.text.length;
 			} else{
@@ -92,8 +92,8 @@ Typewriter.prototype.typeFunction = function() {
 Typewriter.prototype.loop = function() {
 	for(var i = 0; i < this.queue.length; i++) {
 		this.queue[i].loop();
-		if(this.queue[i].done) {
-			if(this.queue[i].callback !== undefined) {
+		if (this.queue[i].done) {
+			if (this.queue[i].callback !== undefined) {
 				this.queue[i].callback.call(game, this.queue[i]);
 			}
 			this.queue.splice(i, 1);
