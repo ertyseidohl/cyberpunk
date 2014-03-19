@@ -37,10 +37,16 @@ div{
 	height: 90%;
 	top: 20px;
 	width: 100%;
-	margin: 0px auto;
+	margin: 0 auto;
 	max-width: 1000px;
 	border: 2px solid green;
 	background-color: black;
+}
+
+@media screen and (max-width: 996px){
+  #console {
+  	margin: 0 -4px;
+  }
 }
 #output{
 	position: absolute;

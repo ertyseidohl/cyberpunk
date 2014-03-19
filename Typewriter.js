@@ -24,26 +24,26 @@ var coerceFormat = function(strArr) {
 		} else if (typeof(str) == "string") {
 			obj.text = str;
 		}
-		obj.text = obj.text.replace('__NAME__', game.player.name).replace('__NAME_UC__', game.player.name.toUpperCase());
 		return obj;
 	}).filter(function(obj) {
 		return obj.text.length > 0;
 	});
 };
 
-Typewriter.prototype.push = function(element, stringObjects, delay, callback) {
-	stringObjects = coerceFormat(stringObjects);
+Typewriter.prototype.push = function(options) {
+	//REQUIRED: element, stringObjects
+	//OPTIONAL: delay, callback, debugMode
 	var that = this;
 	this.queue.push({
-		"element": element,
-		"stringObjects": stringObjects,
-		"delay": delay,
+		"element": options.element,
+		"stringObjects": coerceFormat(options.stringObjects),
+		"delay": options.delay || 1,
 		delayPassed: 0,
 		objectsIndex: 0,
 		loop: that.typeFunction,
 		done: false,
-		finish: false,
-		"callback": callback
+		finish: options.debugMode || false,
+		"callback": options.callback || function(){}
 	});
 };
 

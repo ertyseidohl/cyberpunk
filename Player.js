@@ -1,5 +1,7 @@
 ;(function(exports) {
-	var Player = function() {
+	var Player = function(game) {
+		this.game = game;
+		this.items = game.items;
 		this.inventory = {};
 		this.name = '';
 		this.location = '';
@@ -21,7 +23,7 @@
 				state: flagState
 			};
 			if (typeof(flagLoop) == "function") {
-				newFlag.loop = flagLoop
+				newFlag.loop = flagLoop;
 			}
 			if (flagIndex) {
 				this.flags = this.flags.splice(flagIndex, 1, newFlag);
@@ -37,11 +39,21 @@
 			console.log("WARNING: Tried to remove flag which was not already set: " + flag);
 		}
 		this.flags.splice(flagIndex, 1);
-	}
-
-	Player.prototype.getFlag = function(flag, returnIndex) {
-		return this.flag || false;
 	};
+
+	Player.prototype.getFlag = function(flagName, returnIndex) {
+		var i;
+		for(i = 0; i < this.flags.length; i++) {
+			if(this.flags[i].name == flagName) return returnIndex ? i : this.flags[i];
+		}
+		return false;
+	};
+
+	Player.prototype.getFlagState = function(flagName) {
+		var flag = this.getFlag(flagName);
+		if(!flag) return false;
+		return flag.state;
+	}
 
 	/* ITEMS */
 	Player.prototype.get = function(item) {
@@ -49,7 +61,7 @@
 		console.log("GOT ", item);
 		if (this.has(item)) throw new Error ("Inventory Error: Player already has " + item);
 		this.inventory[item] = true;
-		game.updatePlayer();
+		this.game.updatePlayer();
 	};
 
 	Player.prototype.lose = function(item) {
@@ -57,7 +69,7 @@
 		console.log("LOST ", item);
 		if (!this.has(item)) throw new Error ("Inventory Error: Player cannot lose " + item);
 		this.inventory[item] = false;
-		game.updatePlayer();
+		this.game.updatePlayer();
 	};
 
 	Player.prototype.has = function(item) {

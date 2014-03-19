@@ -1,10 +1,18 @@
 ;(function(exports) {
 	var Game = function(_settings) {
 
+		this.speedString = '';
+		this.speedWait = 3;
+		this.speedWaitMax = this.speedWait;
+		this.monkey = false;
+		this.monkeyString = "";
+
 		this.restart = function() {
 
 			this.state = "beginning";
 			this.lastState = "";
+
+			this.monkeyString = "";
 
 			this.inEl = document.getElementById(_settings.input);
 			this.outEl = document.getElementById(_settings.output);
@@ -32,10 +40,24 @@
 				this.typewriter.finish();
 			}.bind(this);
 
-			this.player = new Player();
+			this.player = new Player(this);
 
 			this.setOptions({});
 		};
+	};
+
+	Game.prototype.speedThrough = function(speedString) {
+		if (speedString === "") {
+			this.speedString = "1";
+			this.monkey = true;
+		} else if (speedString == "Infinity") {
+			this.speedString = "1";
+			this.monkey = "Infinity";
+		} else {
+			this.speedString = speedString;
+		}
+		
+		this.typewriter.finish();
 	};
 
 	Game.prototype.updatePlayer = function() {
@@ -68,6 +90,19 @@
 				flag.loop();
 			}
 		});
+		if (this.speedString.length) {
+			if (this.speedWait > 0) {
+				this.speedWait -= 1;
+			} else{
+				this.speedWait = this.speedWaitMax;
+				this.opt[parseInt(this.speedString.charAt(0),10)].element.click();
+				this.monkeyString += this.speedString.charAt(0);
+				this.speedString = this.speedString.slice(1);
+				if (this.monkey) {
+					this.speedString += parseInt(Math.random() * 4, 10) + 1;
+				}
+			}
+		}
 		if (this.lastState != this.state) {
 
 			console.log(this.lastState, " -> ", this.state);
@@ -75,26 +110,31 @@
 			if (this.script[this.lastState] && this.script[this.lastState].callback) {
 				this.script[this.lastState].callback.call(this);
 			}
-
 			if (!this.script[this.state]) {
-				this.outEl.innerHTML = "Not Yet Written: " + this.state;
-				this.setOptions({
-					1: {
-						text: "Return to last state",
-						callback: (function(lastState) {
-							return function() {
-								this.lastState = this.state;
-								this.setState(lastState);
-							};
-						})(this.lastState)
-					}
-				});
-				this.lastState = this.state;
+				if(this.monkey == "Infinity" && this.monkey) {
+					console.log(this.monkeyString);
+					this.restart();
+				} else if(this.monkey) {
+					console.log(this.monkeyString);
+					this.monkeyString = "";
+					this.speedString = "";
+					this.monkey = false;
+				} else {
+					this.outEl.innerHTML = "Not Yet Written: " + this.state;
+					this.setOptions({
+						1: {
+							text: "Return to last state",
+							callback: (function(lastState) {
+								return function() {
+									this.lastState = this.state;
+									this.setState(lastState);
+								};
+							})(this.lastState)
+						}
+					});
+					this.lastState = this.state;
+				}
 				return;
-			}
-
-			if (this.script[this.state].checkpoint) {
-				this.checkCheckpoint(this.script[this.state].checkpoint);
 			}
 
 			if (this.script[this.state].callfore) {
@@ -112,11 +152,11 @@
 				this.updatePlayer();
 			}
 			if (this.script[this.state].options) {
-				this.typewriter.push(
-					this.outEl,
-					this.script[this.state].text,
-					1,
-					function(element) {
+				this.typewriter.push({
+					element: this.outEl,
+					stringObjects: this.script[this.state].text,
+					delay: 1,
+					callback: function(element) {
 						var i = 1;
 						var options = {};
 						this.script[this.state].options.forEach(function(option) {
@@ -132,8 +172,9 @@
 							}
 						});
 						this.setOptions(options);
-					}
-				);
+					},
+					debugMode: this.speedString.length > 0
+				});
 			}
 
 			this.lastState = this.state;
@@ -184,51 +225,6 @@
 		} else if (key == 144) { // "~"
 			this.typewriter.finish();
 		}
-	};
-
-	Game.prototype.checkCheckpoint = function(checkpoint) {
-		console.log("Checkpoint Reached: " + this.state);
-
-		var req;
-		var opt;
-		var inv;
-
-		for(var item in this.items) {
-			req = checkpoint.player_required_inventory.indexOf(item) !== -1;
-			opt = checkpoint.player_optional_inventory.indexOf(item) !== -1;
-			inv = this.player.has(item);
-			if (!req && !opt && inv) throw new Error("Checkpoint Error! Inevntory item '" + item + "' not required or optional at " + this.state);
-			if (req && !inv) throw new Error("Checkpoint Error! Inventory item '" + item + "' required but not found at " + this.state);
-		}
-		for(var evt in this.flags) {
-			req = checkpoint.player_required_flags.indexOf(evt) !== -1;
-			opt = checkpoint.player_optional_flags.indexOf(evt) !== -1;
-			done = this.player.has(evt);
-			if (!req && !opt && done) throw new Error("Checkpoint Error! Event '" + evt + "' not required or optional at " + this.state);
-			if (req && !done) throw new Error("Checkpoint Error! Event '" + evt + "' required but not found at " + this.state);
-		}
-	};
-
-	Game.prototype.goToCheckpoint = function(checkpoint) {
-		this.typewriter.clear();
-		this.player = new Player();
-		this.reset();
-		var item, evt;
-		for (item in checkpoint.player_optional_inventory) {
-			this.player.get(checkpoint.player_optional_inventory[item]);
-		}
-		for (item in checkpoint.player_required_inventory) {
-			this.player.get(checkpoint.player_required_inventory[item]);
-		}
-		for (evt in checkpoint.player_optional_flags) {
-			this.player.happen(checkpoint.player_optional_flags[evt]);
-		}
-		for (evt in checkpoint.player_required_flags) {
-			this.player.happen(checkpoint.player_required_flags[evt]);
-		}
-		this.lastState = "";
-		this.setState(checkpoint.script_state);
-		checkpoint.callback.apply(this, []);
 	};
 
 	var _get = function(url, callback) {
