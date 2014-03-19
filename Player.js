@@ -1,8 +1,8 @@
 ;(function(exports) {
 	var Player = function(game) {
 		this.game = game;
-		this.items = game.items;
-		this.inventory = {};
+		this.items = game.items.clone();
+		this.inventory = [];
 		this.name = '';
 		this.location = '';
 		this.flags = [];
@@ -53,27 +53,31 @@
 		var flag = this.getFlag(flagName);
 		if(!flag) return false;
 		return flag.state;
-	}
+	};
 
 	/* ITEMS */
-	Player.prototype.get = function(item) {
-		if (!item) throw new Error("Inventory Error: item is not an object");
-		console.log("GOT ", item);
-		if (this.has(item)) throw new Error ("Inventory Error: Player already has " + item);
-		this.inventory[item] = true;
+	Player.prototype.acquire = function(itemName) {
+		if (!itemName) throw new Error("Inventory Error: itemName is not an object");
+		console.log("GOT ", itemName);
+		if (this.has(itemName)) throw new Error ("Inventory Error: Player already has " + itemName);
+		this.inventory.push(itemName);
 		this.game.updatePlayer();
 	};
 
-	Player.prototype.lose = function(item) {
-		if (!item) throw new Error("Inventory Error: item is not an object");
-		console.log("LOST ", item);
-		if (!this.has(item)) throw new Error ("Inventory Error: Player cannot lose " + item);
-		this.inventory[item] = false;
+	Player.prototype.lose = function(itemName) {
+		if (!itemName) throw new Error("Inventory Error: itemName is not an object");
+		console.log("LOST ", itemName);
+		if (!this.has(itemName)) throw new Error ("Inventory Error: Player cannot lose " + itemName);
+		this.inventory.splice(this.inventory.indexOf(itemName), 1);
 		this.game.updatePlayer();
 	};
 
-	Player.prototype.has = function(item) {
-		return this.inventory[item] === true;
+	Player.prototype.has = function(itemName) {
+		return this.inventory[itemName] === true;
+	};
+
+	Player.prototype.getItem = function(itemName) {
+		return this.items[itemName];
 	};
 
 	/* STATES */

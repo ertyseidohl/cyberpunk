@@ -61,35 +61,38 @@
 	};
 
 	Game.prototype.updatePlayer = function() {
-		var s = '';
-		s += '<p><span class="heavy">Name:</span><br  />' + this.player.name + '</p>';
-		s += '<p><span class="heavy">Location:</span><br />' + this.player.location + '</p>';
-		s += '<p><span class="heavy">Inventory:</span><br />';
+		var str = '';
+		str += '<p><span class="heavy">Name:</span><br  />' + this.player.name + '</p>';
+		str += '<p><span class="heavy">Location:</span><br />' + this.player.location + '</p>';
+		str += '<p><span class="heavy">Inventory:</span><br />';
 		if (this.player.inventory.length === 0) {
-			s += 'No Items';
+			str += 'No Items';
 		} else {
-			s += '<ul>';
-			for (var item in this.player.inventory) {
-				if (typeof(item) == "string") {
-					s += '<li>' + item + '</li>';
-				} else if (typeof(item) == "object") {
-					s += '<li>' + item.toString() + '</li>';
+			str += '<ul>';
+			this.player.inventory.forEach(function(item) {
+				if (typeof(this.player.items[item]) == "string") {
+					str += '<li>' + this.player.items[item] + '</li>';
+				} else if (typeof(this.player.items[item]) == "object") {
+					str += '<li>' + this.player.items[item].displayString() + '</li>';
 				} else{
-					throw new Error("Inventory Error: item not object nor string");
+					throw new Error("Inventory Error: item not object nor string", item);
 				}
-			}
-			s += '</ul>';
+			}.bind(this));
+			str += '</ul>';
 		}
-		s += '</p>';
-		this.playerEl.innerHTML = s;
+		str += '</p>';
+		this.playerEl.innerHTML = str;
 	};
 
 	Game.prototype.loop = function() {
-		this.player.flags.forEach(function(flag) {
-			if (flag.loop !== undefined) {
-				flag.loop();
+		this.player.inventory.forEach(function(item) {
+			if(this.player.items[item].loop !== undefined) {
+				var dirty = this.player.items[item].loop();
+				if (dirty) {
+					this.updatePlayer();
+				}
 			}
-		});
+		}.bind(this));
 		if (this.speedString.length) {
 			if (this.speedWait > 0) {
 				this.speedWait -= 1;

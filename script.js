@@ -110,7 +110,7 @@
 			location: "Boulder, CO and Brooklyn, NY",
 			callfore: function() {
 				game.player.name = "Handprint Industries";
-				game.player.inventory = ["Awesomeness", "Silly Hats"];
+				game.player.inventory = ["credits0", "credits1"];
 			},
 			callback: function() {
 				game.player.name = "";
@@ -163,7 +163,7 @@
 		start: {
 			location: 'Mizumo HQ, room 2503',
 			callfore: function() {
-				game.player.get(game.player.items.smartphone);
+				game.player.acquire('smartphone');
 			},
 			text: [
 				"You look up from your stale coffee at the dim, glowing screen of your Mizumo Corporation terminal.",
@@ -243,7 +243,7 @@
 					state: "room_2206_examine"
 				},
 				{
-					condition: function() {return !(game.player.has(game.player.items.sb4_keycard));},
+					condition: function() {return !(game.player.has('sb4_keycard'));},
 					text: "Get the keycard",
 					state: "room_2206_keycard"
 				},
@@ -267,7 +267,7 @@
 			],
 			options: [
 				{
-					condition: function() {return !(game.player.has(game.player.items.sb4_keycard));},
+					condition: function() {return !(game.player.has('sb4_keycard'));},
 					text: "Get the keycard",
 					state: "room_2206_keycard"
 				},
@@ -341,7 +341,7 @@
 					state: "elevator_call"
 				},
 				{
-					condition: function() {return game.player.location == "Mizumo HQ, Room 2206" && !(game.player.has(game.player.items.sb4_keycard));},
+					condition: function() {return game.player.location == "Mizumo HQ, Room 2206" && !(game.player.has('sb4_keycard'));},
 					text: "Get the keycard from the desk",
 					state: "room_2206_keycard"
 				},
@@ -379,7 +379,7 @@
 					state: "elevator_call"
 				},
 				{
-					condition: function() {return game.player.location == "Mizumo HQ, Room 2206" && !(game.player.has(game.player.items.sb4_keycard));},
+					condition: function() {return game.player.location == "Mizumo HQ, Room 2206" && !(game.player.has('sb4_keycard'));},
 					text: "Get the keycard from the desk",
 					state: "room_2206_keycard"
 				},
@@ -408,7 +408,7 @@
 			],
 			options: [
 				{
-					condition: function() {return game.player.location == "Mizumo HQ, Room 2206" && !(game.player.has(game.player.items.sb4_keycard));},
+					condition: function() {return game.player.location == "Mizumo HQ, Room 2206" && !(game.player.has('sb4_keycard'));},
 					//player is in downstairs office, no keycard
 					text: "Get the keycard from the desk",
 					state: "room_2206_keycard",
@@ -436,7 +436,7 @@
 		room_2206_keycard: {
 			location: 'Mizumo HQ, Room 2206',
 			callfore: function() {
-				game.player.get(game.player.items.sb4_keycard);
+				game.player.acquire('sb4_keycard');
 			},
 			text: [
 				"You pick up the keycard. It looks like your own, except their department code is \"AIRT\", which you've never heard of. The name on the keycard is \"Jordan Landes\"."
@@ -445,7 +445,7 @@
 				{
 					text: "Put the keycard back",
 					callback: function() {
-						game.player.lose(game.player.items.sb4_keycard);
+						game.player.lose('sb4_keycard');
 					},
 					state: "room_2206_stay"
 				},
@@ -467,7 +467,7 @@
 					state: "room_2206_examine"
 				},
 				{
-					condition: function() {return !(game.player.has(game.player.items.sb4_keycard));},
+					condition: function() {return !(game.player.has('sb4_keycard'));},
 					text: "Get the keycard",
 					state: "room_2206_keycard"
 				},
@@ -509,7 +509,7 @@
 					state: "return_to_desk"
 				},
 				{
-					condition: function() {return (game.player.has(game.player.items.sb4_keycard));},
+					condition: function() {return (game.player.has('sb4_keycard'));},
 					text: "Use Mizumo keycard",
 					state: "elevator_unlocked"
 				}
@@ -614,7 +614,7 @@
 					state: "sb4_arrive"
 				},
 				{
-					condition: function() { return !game.player.has(game.player.items.multitool); },
+					condition: function() { return !game.player.has('multitool'); },
 					text: "Investigate the elevators",
 					state: "electrical_box"
 				},
@@ -633,7 +633,7 @@
 					state: "sb4_arrive"
 				},
 				{
-					condition: function() { return !game.player.has(game.player.items.multitool); },
+					condition: function() { return !game.player.has('multitool'); },
 					text: "Look around near the elevator",
 					state: "electrical_box"
 				},
@@ -705,7 +705,7 @@
 				"You pick up a small multitool, maybe it will come in handy later?"
 			],
 			callfore: function() {
-				game.player.get(game.player.items.multitool);
+				game.player.acquire('multitool');
 			},
 			options: [
 				{
@@ -717,12 +717,12 @@
 		sb4_rooms: {
 			location: 'Mizumo HQ, Sub-Basement 4, Corridor SB430',
 			callfore: function() {
-				game.player.items.smartphone.isFlashlightOn = false;
+				game.player.getItem('smartphone').isFlashlightOn = false;
 			},
 			text: [
 				"You come to a junction with three closed doors. The only light here is a single, buzzing flourescent tube, which reflects off the tile underfoot. The air here feels colder, and you hear the humming of electronic equipment through the walls.",
 				{
-					condition: function(){return game.player.getFlagState('banging_sounds') == "started";},
+					condition: function(){return game.player.acquireFlagState('banging_sounds') == "started";},
 					text: "The banging noise is louder now! You hear it, still somewhat muffled, behind the door to room S438."
 				},
 				{
@@ -736,12 +736,12 @@
 					state: "sb4_elevator"
 				},
 				{
-					condition: function(){return !game.player.has(game.player.items.sb4_keycard);},
+					condition: function(){return !game.player.has('sb4_keycard');},
 					text: "Enter room S437",
 					state: "sb4_rm37_locked"
 				},
 				{
-					condition: function(){return game.player.has(game.player.items.sb4_keycard) && !game.player.visited('sb4_rm37_light');},
+					condition: function(){return game.player.has('sb4_keycard') && !game.player.visited('sb4_rm37_light');},
 					text: "Enter room S437",
 					state: "sb4_rm37_dark"
 				},
@@ -779,7 +779,7 @@
 		sb4_rm37_dark: {
 			location: "Mizumo HQ, Sub-Basement 4, Room 37",
 			callfore: function() {
-				game.player.items.smartphone.isFlashlightOn = false;
+				game.player.getItem('smartphone').isFlashlightOn = false;
 				game.player.setFlag("sb4_rm37_lightsource", false);
 			},
 			text: [
@@ -799,14 +799,14 @@
 		sb4_rm37_flashlight: {
 			location: "Mizumo HQ, Sub-Basement 4, Room 37",
 			callFore: function() {
-				game.player.items.smartphone.isFlashlightOn = true;
-				if(!game.player.getFlag('banging_sounds')) {
+				if(game.player.has('smartphone')) game.player.acquireItem('smartphone').isFlashlightOn = true;
+				if(!game.player.acquireFlag('banging_sounds')) {
 					game.player.setFlag('banging_sounds', "started");
 				}
 			},
 			text: [
 				"You shine your phone flashlight around the room. It's a messy office: papers and cables spill over the half dozen desks that line the outer walls of the room.",
-				function() { if(game.player.getFlagState('banging_sounds') == "started") return "You hear a muffled banging sound, as though someone is pounding on a door back at the main corridor."; }
+				function() { if(game.player.acquireFlagState('banging_sounds') == "started") return "You hear a muffled banging sound, as though someone is pounding on a door back at the main corridor."; }
 			],
 			options: [
 				{
@@ -830,14 +830,14 @@
 		sb4_rm37_light: {
 			location: "Mizumo HQ, Sub-Basement 4, Room 37",
 			callFore: function() {
-				if(!game.player.getFlag('banging_sounds')) {
+				if(!game.player.acquireFlag('banging_sounds')) {
 					game.player.setFlag('banging_sounds', "started");
 					game.player.setFlag("sb4_rm37_lightsource", "lights");
 				}
 			},
 			text: [
 				"You hit the lightswitch and the room floods with light. A small security camera in the corner whines as it adjusts to get a clearer picture of you.",
-				function() { if(game.player.getFlagState('banging_sounds') == "started") return "You hear a muffled banging sound, as though someone is pounding on a door back at the main corridor."; }
+				function() { if(game.player.acquireFlagState('banging_sounds') == "started") return "You hear a muffled banging sound, as though someone is pounding on a door back at the main corridor."; }
 			],
 			options: [
 				{
@@ -854,42 +854,42 @@
 				}
 			],
 		},
-		sb4_rm37_examine: {
-			location: "Mizumo HQ, Sub-Basement 4, Room 37",
-			text: [
-				"The papers are mostly technical documents and programming manuals. A small placard reads \"Jordan Landes, AIRT Technical Lead\". There is a picture of a smiling family - a man, a woman, and a child.",
+		// sb4_rm37_examine: {
+		// 	location: "Mizumo HQ, Sub-Basement 4, Room 37",
+		// 	text: [
+		// 		"The papers are mostly technical documents and programming manuals. A small placard reads \"Jordan Landes, AIRT Technical Lead\". There is a picture of a smiling family - a man, a woman, and a child.",
 
-			],
-			options: [
-				{
-					text: "",
-					state: ""
-				},
-			],
-		},
-		sb4_rm38_pre: {
-			location: "Mizumo HQ, Sub-Basement 4, Room 38",
-			text: [
-				"",
-			],
-			options: [
-				{
-					text: "",
-					state: ""
-				},
-			],
-		},
-		sb4_rm39_locked: {
-			location: "Mizumo HQ, Sub-Basement 4, Corridor SB430",
-			text: [
-				"",
-			],
-			options: [
-				{
-					text: "",
-					state: ""
-				},
-			],
-		},
+		// 	],
+		// 	options: [
+		// 		{
+		// 			text: "",
+		// 			state: ""
+		// 		},
+		// 	],
+		// },
+		// sb4_rm38_pre: {
+		// 	location: "Mizumo HQ, Sub-Basement 4, Room 38",
+		// 	text: [
+		// 		"",
+		// 	],
+		// 	options: [
+		// 		{
+		// 			text: "",
+		// 			state: ""
+		// 		},
+		// 	],
+		// },
+		// sb4_rm39_locked: {
+		// 	location: "Mizumo HQ, Sub-Basement 4, Corridor SB430",
+		// 	text: [
+		// 		"",
+		// 	],
+		// 	options: [
+		// 		{
+		// 			text: "",
+		// 			state: ""
+		// 		},
+		// 	],
+		// },
 	};
 })(game);
