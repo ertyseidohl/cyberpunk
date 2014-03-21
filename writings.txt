@@ -146,7 +146,67 @@ return to elevators
 
 ###
 
-the player examines rooms 1 and 3, and finds nothing of interest. In room 1, they can begin to hear the pounding sounds from what they assume to be Jordan Landes, trapped in the data center - but they would be wrong. It's actually a trick being played by JANUS to get the player into a good position.
+sb4 rm 2 outer
+
+You open the door to sb4 rm 2, but find yourself in a small, dark chamber with another door opposite. The other door has a rather intracate locking mechanism on it, and is labeled "WARNING - AUTHORIZED PERSONNEL ONLY". The room is illuminated only by a large red LED on the opposite door.
+
+if pounding:
+	The pounding noise is definitely coming from inside the other door.
+
+It's very chilly in here - the hum of mechanical equipment is louder, and you feel cold air hitting you from vents on the ceiling.
+
+::
+
+Go through the inner door
+	sb4 rm 2 inner locked
+Close the door behind you
+	sb4 rm 2 inner unlock
+Investigate the inner door
+	sb4 rm 2 inner investigate
+Back to the corridor
+	sb4 jnct
+
+###
+
+sb4 rm 2 inner locked
+
+The inner door is locked. Even Landes' keycard won't open it.
+
+::
+
+Close the outer door
+	sb4 rm 2 inner unlock
+Look closely at the panel
+	sb4 rm 2 inner investigate
+Back to the corridor
+	sb4 jnct
+
+###
+
+sb4 rm 2 inner unlock
+
+As you shut the outer door, you hear a loud click. The sound from the air vents in the ceiling lowers in pitch. The red LED on the opposite door changes to green.
+
+::
+
+Investigate the inner door
+	sb4 rm 2 inner investigate
+Open the outer door
+	sb4 rm 2 outer locked
+Open the inner door
+	sb4 rm 2 inner unlocked
+
+###
+
+sb4 rm 2 inner investigate
+
+###
+
+sb4 rm 2 outer locked
+
+###
+
+sb4 rm 2 inner unlocked
 
 The player eventually  (or quickly) opens the door to room 2 - and finds themselves in an airlock . The pounding noise is coming from the next room in - a door labeled "WARNING - AUTHORIZED PERSONEL ONLY." The player begins to feel cold.
 
