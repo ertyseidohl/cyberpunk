@@ -139,7 +139,7 @@
 					text: "Evan Conway"
 				},
 				{
-					text:"Developers/Scripters:",
+					text:"Jr. Developer:",
 					contain: "h4"
 				},
 				{
@@ -722,7 +722,7 @@
 			text: [
 				"You come to a junction with three closed doors. The only light here is a single, buzzing flourescent tube, which reflects off the tile underfoot. The air here feels colder, and you hear the humming of electronic equipment through the walls.",
 				{
-					condition: function(){return game.player.acquireFlagState('banging_sounds') == "started";},
+					condition: function(){return game.player.getFlagState('banging_sounds') == "started";},
 					text: "The banging noise is louder now! You hear it, still somewhat muffled, behind the door to room S438."
 				},
 				{
@@ -780,7 +780,7 @@
 			location: "Mizumo HQ, Sub-Basement 4, Room 37",
 			callfore: function() {
 				game.player.getItem('smartphone').isFlashlightOn = false;
-				game.player.setFlag("sb4_rm37_lightsource", false);
+				game.player.setFlag("sb4_rm37_lights", false);
 			},
 			text: [
 				"It's dark in here.",
@@ -800,13 +800,13 @@
 			location: "Mizumo HQ, Sub-Basement 4, Room 37",
 			callFore: function() {
 				if(game.player.has('smartphone')) game.player.acquireItem('smartphone').isFlashlightOn = true;
-				if(!game.player.acquireFlag('banging_sounds')) {
+				if(!game.player.getFlag('banging_sounds')) {
 					game.player.setFlag('banging_sounds', "started");
 				}
 			},
 			text: [
 				"You shine your phone flashlight around the room. It's a messy office: papers and cables spill over the half dozen desks that line the outer walls of the room.",
-				function() { if(game.player.acquireFlagState('banging_sounds') == "started") return "You hear a muffled banging sound, as though someone is pounding on a door back at the main corridor."; }
+				function() { if(game.player.getFlagState('banging_sounds') == "started") return "You hear a muffled banging sound, as though someone is pounding on a door back at the main corridor."; }
 			],
 			options: [
 				{
@@ -830,14 +830,14 @@
 		sb4_rm37_light: {
 			location: "Mizumo HQ, Sub-Basement 4, Room 37",
 			callFore: function() {
-				if(!game.player.acquireFlag('banging_sounds')) {
+				if(!game.player.getFlag('banging_sounds')) {
 					game.player.setFlag('banging_sounds', "started");
-					game.player.setFlag("sb4_rm37_lightsource", "lights");
+					game.player.setFlag("sb4_rm37_lights", true);
 				}
 			},
 			text: [
 				"You hit the lightswitch and the room floods with light. A small security camera in the corner whines as it adjusts to get a clearer picture of you.",
-				function() { if(game.player.acquireFlagState('banging_sounds') == "started") return "You hear a muffled banging sound, as though someone is pounding on a door back at the main corridor."; }
+				function() { if(game.player.getFlagState('banging_sounds') == "started") return "You hear a muffled banging sound, as though someone is pounding on a door back at the main corridor."; }
 			],
 			options: [
 				{
@@ -854,42 +854,50 @@
 				}
 			],
 		},
-		// sb4_rm37_examine: {
-		// 	location: "Mizumo HQ, Sub-Basement 4, Room 37",
-		// 	text: [
-		// 		"The papers are mostly technical documents and programming manuals. A small placard reads \"Jordan Landes, AIRT Technical Lead\". There is a picture of a smiling family - a man, a woman, and a child.",
-
-		// 	],
-		// 	options: [
-		// 		{
-		// 			text: "",
-		// 			state: ""
-		// 		},
-		// 	],
-		// },
-		// sb4_rm38_pre: {
-		// 	location: "Mizumo HQ, Sub-Basement 4, Room 38",
-		// 	text: [
-		// 		"",
-		// 	],
-		// 	options: [
-		// 		{
-		// 			text: "",
-		// 			state: ""
-		// 		},
-		// 	],
-		// },
-		// sb4_rm39_locked: {
-		// 	location: "Mizumo HQ, Sub-Basement 4, Corridor SB430",
-		// 	text: [
-		// 		"",
-		// 	],
-		// 	options: [
-		// 		{
-		// 			text: "",
-		// 			state: ""
-		// 		},
-		// 	],
-		// },
+		sb4_rm37_examine: {
+			location: "Mizumo HQ, Sub-Basement 4, Room 37",
+			text: [
+				"The papers are mostly technical documents and programming manuals. A small placard reads \"Jordan Landes, AIRT Technical Lead\". There is a picture of a smiling family - a man, a woman, and a child.",
+				function() { if(game.player.getItem('smartphone').isFlashlightOn && !game.player.getFlag('sb4_rm37_lights')) return "With just your smartphone flashlight, it's hard to see much more.";},
+				function() { if(game.player.getFlag('sb4_rm37_lights')) return "Many of the books and documents have to do with systems integration and user experience. You see a variety of instruction manuals for mechanical systems: door mechanisms, air conditioners, fire supression systems, etc.";},
+				function() { if(game.player.getFlagState('banging_sounds') == "started") return "You continue to hear muffled pounding from another room.";}
+			],
+			options: [
+				{
+					condition: function() {return game.player.getFlagState('sb4_rm37_lights') == 'lights';},
+					text: "Turn on the lights",
+					state: "sb4_rm37_light"
+				},
+				{
+					condition: function() {return game.player.getFlagState('sb4_rm37_lights') == 'flashlight';},
+					text: "Turn off your flashlight",
+					state: "sb4_rm37_dark"
+				}
+			],
+		},
+		sb4_rm38_pre: {
+			location: "Mizumo HQ, Sub-Basement 4, Room 38",
+			text: [
+				"",
+			],
+			options: [
+				{
+					text: "",
+					state: ""
+				},
+			],
+		},
+		sb4_rm39_locked: {
+			location: "Mizumo HQ, Sub-Basement 4, Corridor SB430",
+			text: [
+				"",
+			],
+			options: [
+				{
+					text: "",
+					state: ""
+				},
+			],
+		},
 	};
 })(game);
