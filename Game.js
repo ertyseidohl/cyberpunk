@@ -12,6 +12,8 @@
 			this.state = "beginning";
 			this.lastState = "";
 
+			this.flashes = [];
+
 			this.monkeyString = "";
 
 			this.inEl = document.getElementById(_settings.input);
@@ -56,7 +58,7 @@
 		} else {
 			this.speedString = speedString;
 		}
-		
+
 		this.typewriter.finish();
 	};
 
@@ -85,9 +87,11 @@
 	};
 
 	Game.prototype.loop = function() {
+		var textToWrite = [];
+		var dirty = false;
 		this.player.inventory.forEach(function(item) {
 			if(this.player.items[item].loop !== undefined) {
-				var dirty = this.player.items[item].loop();
+				dirty = this.player.items[item].loop();
 				if (dirty) {
 					this.updatePlayer();
 				}
@@ -154,10 +158,15 @@
 				this.player.location = this.script[this.state].location;
 				this.updatePlayer();
 			}
+			if (this.flashes.length) {
+				textToWrite = textToWrite.concat(this.flashes.slice());
+				this.flashes = [];
+			}
 			if (this.script[this.state].options) {
+				textToWrite = textToWrite.concat(this.script[this.state].text);
 				this.typewriter.push({
 					element: this.outEl,
-					stringObjects: this.script[this.state].text,
+					stringObjects: textToWrite,
 					delay: 1,
 					callback: function(element) {
 						var i = 1;
@@ -191,6 +200,10 @@
 		this.typewriter.loop();
 
 		this.frame += 1;
+	};
+
+	Game.prototype.addFlash = function(flash) {
+		this.flashes.push(flash);
 	};
 
 	Game.prototype.setState = function(newState, reset) {

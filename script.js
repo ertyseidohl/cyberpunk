@@ -630,7 +630,7 @@
 			options: [
 				{
 					text: "Go to the door on your right",
-					state: "sb4_arrive"
+					state: "sb4_rooms"
 				},
 				{
 					condition: function() { return !game.player.has('multitool'); },
@@ -653,7 +653,7 @@
 				},
 				{
 					text: "Go to the door on your right",
-					state: "sb4_arrive"
+					state: "sb4_rooms"
 				}
 			]
 		},
@@ -721,14 +721,8 @@
 			},
 			text: [
 				"You come to a junction with three closed doors. The only light here is a single, buzzing flourescent tube, which reflects off the tile underfoot. The air here feels colder, and you hear the humming of electronic equipment through the walls.",
-				{
-					condition: function(){return game.player.getFlagState('banging_sounds') == "started";},
-					text: "The banging noise is louder now! You hear it, still somewhat muffled, behind the door to room S438."
-				},
-				{
-					condition: function(){return !game.player.visited('sb4_rooms');},
-					text: "You hear the small whine of a security camera. There is one above the door to S438, and you catch the glint of the lens as it brings you into focus."
-				}
+				function(){if(game.player.getFlagState('banging_sounds') == "started") return "The banging noise is louder now! You hear it, still somewhat muffled, behind the door to room S438."; },
+				function(){if(!game.player.visited('sb4_rooms')) return "You hear the small whine of a security camera. There is one above the door to S438, and you catch the glint of the lens as it brings you into focus."; }
 			],
 			options: [
 				{

@@ -73,7 +73,7 @@
 	};
 
 	Player.prototype.has = function(itemName) {
-		return this.inventory[itemName] === true;
+		return this.inventory.indexOf(itemName) != -1;
 	};
 
 	Player.prototype.getItem = function(itemName) {

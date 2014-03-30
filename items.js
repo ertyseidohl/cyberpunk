@@ -14,10 +14,11 @@
 			loop: function(){
 				if(this.battery <= 0) {
 					this.battery = 0;
-					return;
+					exports.addFlash("Your cellphone has run out of battery.");
+					delete this.loop;
 				}
 				var battInt = this.battery | 0;
-				rate = 1/60; // 5 minutes per drop
+				rate = 1/(60*60*5); // 5 minutes per drop
 				if(this.isFlashlightOn) {
 					rate *= 3;
 				}
