@@ -872,7 +872,9 @@
 		sb4_rm38_pre: {
 			location: "Mizumo HQ, Sub-Basement 4, Room 38",
 			text: [
-				"",
+				"SORRY, YOU'VE REACHED AN END.",
+				"I stopped working on this game in 2013, so there's some loose ends (like this one)",
+				"Refresh to explore again!"
 			],
 			options: [
 				{
@@ -884,7 +886,9 @@
 		sb4_rm39_locked: {
 			location: "Mizumo HQ, Sub-Basement 4, Corridor SB430",
 			text: [
-				"",
+				"SORRY, YOU'VE REACHED AN END.",
+				"I stopped working on this game in 2013, so there's some loose ends (like this one)",
+				"Refresh to explore again!"
 			],
 			options: [
 				{
